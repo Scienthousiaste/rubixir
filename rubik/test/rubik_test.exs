@@ -4,9 +4,9 @@ defmodule RubikTest do
   alias Rubik.Cube
   alias Rubik.Transforms
 
-  test "Applying the left transformation on a solved cube" do
+  test "Applying the left q-turn on a solved cube" do
     cube = Cube.new_cube()
-    c1 = Transforms.apply(cube, "L")
+    c1 = Transforms.qturn(cube, "L")
     assert c1."ULF" == "blu"
     assert c1."LF"  == "lu"
     assert c1."ULB" == "bld"
@@ -20,20 +20,23 @@ defmodule RubikTest do
   test "4 identical q-turns get back to initial state" do
     for transform <- ["F", "L", "U", "R", "D", "B"] do 
       cube = Cube.new_cube()
-      c1 = Transforms.apply(cube, transform) 
+      c1 = Transforms.qturn(cube, transform) 
       assert c1 != cube
-      c2 = Transforms.apply(c1, transform) 
+      c2 = Transforms.qturn(c1, transform) 
       assert c2 != c1
-      c3 = Transforms.apply(c2, transform) 
+      c3 = Transforms.qturn(c2, transform) 
       assert c3 != c2
-      c4 = Transforms.apply(c3, transform) 
+      c4 = Transforms.qturn(c3, transform) 
       assert c4 == cube
     end
   end
 
-  test "Applying all basic transformations and get the correct state of the cube" do
-    cube = Enum.reduce(["L", "U", "L", "D", "F", "R", "B", "R"], Cube.new_cube(),
-      fn transformation, cube -> Rubik.Transforms.apply(cube, transformation) end
+  test "Applying all basic q-turns and get the correct state of the cube" do
+    cube = Enum.reduce(["L", "U", "L", "D", "F", "R", "B", "R"],
+      Cube.new_cube(),
+      fn transformation, cube 
+        -> Rubik.Transforms.qturn(cube, transformation)
+      end
     )
 
     assert cube == %Rubik.State{
@@ -58,6 +61,27 @@ defmodule RubikTest do
       RF:   "rb",
       RB:   "ur"
     }
+  end
+
+  test "Double q-turns work as expected" do
+    for transform <- ["F", "L", "U", "R", "D", "B"] do 
+      cube = Cube.new_cube
+      c1 = Transforms.qturn(cube, transform <> "2")
+      c2a = Transforms.qturn(cube, transform)
+      c2 = Transforms.qturn(c2a, transform)
+      assert c1 == c2
+    end
+  end
+
+  test "Reverse q-turns work as expected" do
+    for transform <- ["F", "L", "U", "R", "D", "B"] do 
+      cube = Cube.new_cube
+      c1 = Transforms.qturn(cube, transform <> "'")
+      c2a = Transforms.qturn(cube, transform)
+      c2b = Transforms.qturn(c2a, transform)
+      c2 = Transforms.qturn(c2b, transform)
+      assert c1 == c2
+    end
   end
 
 end

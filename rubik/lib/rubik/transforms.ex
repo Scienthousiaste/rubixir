@@ -14,7 +14,8 @@ defmodule Rubik.Transforms do
       <> String.at(corner, third)
   end
 
-  defp corner_transformation(cube, rotation, corner_tuples) do
+  defp corner_transformation(cube, { rotation, {corner_list, direction} } ) do
+    corner_tuples = corner_to_corner(corner_list, direction)
     Enum.reduce(corner_tuples, cube,
       fn ({from, to}, acc_cube) -> 
         Map.update!(acc_cube, to,
@@ -34,7 +35,7 @@ defmodule Rubik.Transforms do
     edge
   end
 
-  defp edge_transformation(cube, edges, switch) do
+  defp edge_transformation(cube, {edges, switch}) do
     edge_to_edge(edges)
     |> Enum.reduce(cube, 
       fn ({from, to}, acc_cube) ->
@@ -44,58 +45,73 @@ defmodule Rubik.Transforms do
     )
   end
 
-  def apply(cube, "F") do
-    cube
-    |> corner_transformation(
-      [1, 0, 2],
-      corner_to_corner([:ULF, :URF, :DRF, :DLF], :previous)
-    )
-    |> edge_transformation([:UF, :RF, :DF, :LF], :no_switch)
+  defp get_corner_data("F") do
+    { [1, 0, 2], { [:ULF, :URF, :DRF, :DLF], :previous } }
+  end
+  defp get_corner_data("B") do
+    { [1, 0, 2], { [:ULB, :URB, :DRB, :DLB], :next } }
+  end
+  defp get_corner_data("U") do
+    { [0, 2, 1], { [:ULB, :URB, :URF, :ULF], :previous } }
+  end
+  defp get_corner_data("D") do
+    { [0, 2, 1], { [:DLB, :DRB, :DRF, :DLF], :next } }
+  end
+  defp get_corner_data("L") do
+    { [2, 1, 0], { [:ULB, :DLB, :DLF, :ULF], :next } }
+  end
+  defp get_corner_data("R") do
+    { [2, 1, 0], { [:URF, :URB, :DRB, :DRF], :previous } }
   end
 
-  def apply(cube, "B") do
-    cube
-    |> corner_transformation(
-      [1, 0, 2],
-      corner_to_corner([:ULB, :URB, :DRB, :DLB], :next)
-    )
-    |> edge_transformation([:UB, :LB, :DB, :RB], :no_switch)
+  defp switch_direction(:next) do
+    :previous
+  end
+  defp switch_direction(:previous) do
+    :next
   end
 
-  def apply(cube, "U") do
-    cube
-    |> corner_transformation(
-      [0, 2, 1],
-      corner_to_corner([:ULB, :URB, :URF, :ULF], :previous)
-    )
-    |> edge_transformation([:UB, :UR, :UF, :UL], :no_switch)
+  defp make_switch_direction({ rotation, { corner_list, direction }}) do
+    { rotation, { corner_list, switch_direction(direction) }}
   end
 
-  def apply(cube, "D") do
-    cube
-    |> corner_transformation(
-      [0, 2, 1],
-      corner_to_corner([:DLB, :DRB, :DRF, :DLF], :next)
-    )
-    |> edge_transformation([:DF, :DR, :DB, :DL], :no_switch)
+  defp get_reverse_corner_data(base) do
+    get_corner_data(base)
+    |> make_switch_direction() 
+  end
+  
+  defp get_edge_data("F"), do: { [:UF, :RF, :DF, :LF], :no_switch }
+  defp get_edge_data("B"), do: { [:UB, :LB, :DB, :RB], :no_switch }
+  defp get_edge_data("U"), do: { [:UB, :UR, :UF, :UL], :no_switch }
+  defp get_edge_data("D"), do: { [:DF, :DR, :DB, :DL], :no_switch }
+  defp get_edge_data("L"), do: { [:UL, :LF, :DL, :LB], :switch }
+  defp get_edge_data("R"), do: { [:UR, :RB, :DR, :RF], :switch }
+
+  defp make_reverse_edge_list({ edge_list, switch }) do
+    { Enum.reverse(edge_list), switch }
   end
 
-  def apply(cube, "L") do
-    cube
-    |> corner_transformation(
-      [2, 1, 0],
-      corner_to_corner([:ULB, :DLB, :DLF, :ULF], :next)
-    )
-    |> edge_transformation([:UL, :LF, :DL, :LB], :switch)
+  defp get_reverse_edge_data(base) do
+    get_edge_data(base)
+    |> make_reverse_edge_list 
   end
 
-  def apply(cube, "R") do
+  def qturn(cube, <<base::bytes-size(1)>> <> "2") do
+   cube
+    |> qturn(base)
+    |> qturn(base)
+  end
+
+  def qturn(cube, <<base::bytes-size(1)>> <> "'") do
+   cube
+   |> corner_transformation(get_reverse_corner_data(base))
+   |> edge_transformation(get_reverse_edge_data(base))
+  end
+
+  def qturn(cube, transformation) do
     cube
-    |> corner_transformation(
-      [2, 1, 0],
-      corner_to_corner([:URF, :URB, :DRB, :DRF], :previous)
-    )
-    |> edge_transformation([:UR, :RB, :DR, :RF], :switch)
+    |> corner_transformation(get_corner_data(transformation))
+    |> edge_transformation(get_edge_data(transformation))
   end
 
 end
