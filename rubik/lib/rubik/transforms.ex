@@ -121,5 +121,8 @@ defmodule Rubik.Transforms do
       end
     )
   end 
+  def qturns(qturn_list) do
+    qturns(Rubik.new_cube(), qturn_list)
+  end
 
 end
