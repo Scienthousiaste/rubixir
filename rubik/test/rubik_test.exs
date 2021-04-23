@@ -32,12 +32,8 @@ defmodule RubikTest do
   end
 
   test "Applying all basic q-turns and get the correct state of the cube" do
-    cube = Enum.reduce(["L", "U", "L", "D", "F", "R", "B", "R"],
-      Cube.new_cube(),
-      fn transformation, cube 
-        -> Rubik.Transforms.qturn(cube, transformation)
-      end
-    )
+    cube = Transforms.qturns(Cube.new_cube(),
+      ["L", "U", "L", "D", "F", "R", "B", "R"])
 
     assert cube == %Rubik.State{
       URF: "dfr",
@@ -76,12 +72,18 @@ defmodule RubikTest do
   test "Reverse q-turns work as expected" do
     for transform <- ["F", "L", "U", "R", "D", "B"] do 
       cube = Cube.new_cube
-      c1 = Transforms.qturn(cube, transform <> "'")
-      c2a = Transforms.qturn(cube, transform)
-      c2b = Transforms.qturn(c2a, transform)
-      c2 = Transforms.qturn(c2b, transform)
-      assert c1 == c2
+      c1 = Transforms.qturn(cube, transform)
+      c2 = Transforms.qturn(c1, transform <> "'")
+      assert c2 == cube 
     end
   end
 
+  test "All types of moves and back" do
+    cube = Cube.new_cube()
+    |> Transforms.qturns(["B", "D", "F'", "B'", "D", "L2", "U", "L", "U'", "B",
+      "D'", "R", "B", "R", "D'", "R", "L'", "F", "U2", "D"])
+    |> Transforms.qturns(Enum.reverse(["B'", "D'", "F", "B", "D'", "L2", "U'",
+      "L'", "U", "B'", "D", "R'", "B'", "R'", "D", "R'", "L", "F'", "U2", "D'"]))
+    assert cube == Cube.new_cube()
+  end
 end

@@ -114,4 +114,12 @@ defmodule Rubik.Transforms do
     |> edge_transformation(get_edge_data(transformation))
   end
 
+  def qturns(cube, qturn_list) do
+    Enum.reduce(qturn_list, cube,
+      fn transformation, cube
+        -> qturn(cube, transformation)
+      end
+    )
+  end 
+
 end
