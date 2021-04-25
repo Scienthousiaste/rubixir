@@ -101,13 +101,11 @@ defmodule Rubik.Transforms do
     |> qturn(base)
     |> qturn(base)
   end
-
   def qturn(cube, <<base::bytes-size(1)>> <> "'") do
    cube
    |> corner_transformation(get_reverse_corner_data(base))
    |> edge_transformation(get_reverse_edge_data(base))
   end
-
   def qturn(cube, transformation) do
     cube
     |> corner_transformation(get_corner_data(transformation))
