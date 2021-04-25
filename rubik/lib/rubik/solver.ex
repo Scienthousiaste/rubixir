@@ -1,62 +1,25 @@
 defmodule Rubik.Solver do
 
-  
-  def solve_cube( cube = %Rubik.State{} ) do
-    solve_with(cube, :CFOP) 
-  end
-
-  def solve_with(cube, :CFOP) do
-    init_cfop_solver_data(cube)
-    |> solve_cross
-  end
-
-  def solve_cross( solver_data = %{ cube: c, base_face: f, moves: m } ) do
-    solver_data
-  end
-
-  defp init_cfop_solver_data(cube) do
-     %Rubik.SolverData{
-      cube:       cube,
-      base_face:  find_cfop_base_face(cube),
-      moves:      []
-    }
-  end
-
   def faces(), do: [:D, :F, :L, :B, :R, :U]
-  def edges_and_corners(:F) do
+
+  def edges(:F), do: [:UF, :RF, :DF, :LF] 
+  def edges(:L), do: [:UL, :LF, :DL, :LB]
+  def edges(:B), do: [:UB, :LB, :DB, :RB]
+  def edges(:R), do: [:UR, :RB, :DR, :RF]
+  def edges(:U), do: [:UB, :UR, :UF, :UL]
+  def edges(:D), do: [:DF, :DR, :DB, :DL]
+
+  def corners(:F), do: [:ULF, :URF, :DRF, :DLF]
+  def corners(:L), do: [:ULB, :ULF, :DLF, :DLB]
+  def corners(:B), do: [:ULB, :URB, :DRB, :DLB]
+  def corners(:R), do: [:URB, :URF, :DRF, :DRB]
+  def corners(:U), do: [:ULF, :ULB, :URB, :URF]
+  def corners(:D), do: [:DLF, :DLB, :DRB, :DRF]
+
+  def edges_and_corners(face) do
     %{
-      edges:    [:UF, :RF, :DF, :LF], 
-      corners:  [:ULF, :URF, :DRF, :DLF]
-    }
-  end
-  def edges_and_corners(:L) do
-    %{
-      edges:    [:LB, :UL, :LF, :DL], 
-      corners:  [:ULB, :ULF, :DLF, :DLB]
-    }
-  end
-  def edges_and_corners(:B) do
-    %{
-      edges:    [:UB, :RB, :DB, :LB], 
-      corners:  [:ULB, :URB, :DRB, :DLB]
-    }
-  end
-  def edges_and_corners(:R) do
-    %{
-      edges:    [:RB, :UR, :RF, :DR], 
-      corners:  [:URB, :URF, :DRF, :DRB]
-    }
-  end
-  def edges_and_corners(:U) do
-    %{
-      edges:    [:UF, :UL, :UB, :UR], 
-      corners:  [:ULF, :ULB, :URB, :URF]
-    }
-  end
-  def edges_and_corners(:D) do
-    %{
-      edges:    [:DF, :DL, :DB, :DR], 
-      corners:  [:DLF, :DLB, :DRB, :DRF]
+      edges: edges(face),
+      corners: corners(face)
     }
   end
 
@@ -85,6 +48,24 @@ defmodule Rubik.Solver do
     compute_base_face_scores(cube)
     |> Enum.max_by(fn {_, v} -> v end)
     |> (fn {face, _} -> face end).()
+  end
+
+  def solve_cube( cube = %Rubik.State{} ) do
+    solve_with(cube, :CFOP) 
+  end
+
+  def solve_with(cube, :CFOP) do
+    init_cfop_solver_data(cube)
+    |> Rubik.SolveCross.solve_cross
+    #|> Rubik.SolveF2L.solve_first_two_lines
+  end
+
+  defp init_cfop_solver_data(cube) do
+     %Rubik.SolverData{
+      cube:       cube,
+      base_face:  find_cfop_base_face(cube),
+      moves:      []
+    }
   end
 
 end
