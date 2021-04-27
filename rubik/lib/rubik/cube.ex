@@ -4,6 +4,11 @@ defmodule Rubik.Cube do
   @regex_qturns ~r/\A(\s*[FRUBLD][2']?\s*)*\z/
   @default_number_moves 30
   
+  def moves do
+    ["R", "R2", "R'", "B", "B2", "B'", "L", "L2", "L'",
+     "F", "F2", "F'", "U", "U2", "U'", "D", "D2", "D'"]
+  end
+
   def new_cube do
     %Rubik.State{}
   end
@@ -17,19 +22,14 @@ defmodule Rubik.Cube do
   end
 
   def scrambled_cube(number_moves) do
-    moves = ["R", "R2", "R'", "B", "B2", "B'", "L", "L2", "L'",
-            "F", "F2", "F'", "U", "U2", "U'", "D", "D2", "D'"]
-
     Enum.reduce(0..(number_moves - 1), new_cube(),
-      fn _x, cube -> Rubik.Transforms.qturn(cube, Enum.random(moves)) end
+      fn _x, cube -> Rubik.Transforms.qturn(cube, Enum.random(moves())) end
     ) 
   end
 
   def is_solved?(cube) do
     cube == new_cube() 
   end
-
-
 
   defp valid_sequence?(sequence) do
     sequence

@@ -1,10 +1,13 @@
 defmodule Rubik.SolveCross do
-  
-  @max_iter_solve_cross 500
+  @max_iter_solve_cross 5
+  @max_moves_per_bfs_search 4
   
   def solve_cross( solver_data = %{ cube: cube, base_face: face } ) do
-    solver_data
-    |> loop_solve_cross(@max_iter_solve_cross, cross_edges_placed?(cube, face))
+    loop_solve_cross(
+      solver_data,
+      @max_iter_solve_cross,
+      cross_edges_placed?(cube, face)
+    )
   end
 
   defp loop_solve_cross(solver_data, _, _cross_edges_placed = true) do
@@ -14,34 +17,57 @@ defmodule Rubik.SolveCross do
     IO.puts "Loop solve cross failed to finish"
     exit(:normal) 
   end
-  defp loop_solve_cross(solver_data = %{ cube: c, base_face: f }, iter, false) do
-    # Here, find next_move - first define an objective?
-    IO.puts "loop solve cross, iter: " <> Integer.to_string(iter)
-    loop_solve_cross(solver_data, iter - 1, cross_edges_placed?(c, f))
+  defp loop_solve_cross(solver_data, iter, false) do
+    solver_data = find_next_cross_goal(solver_data) 
+    |> complete_cross_goal 
+
+    loop_solve_cross(solver_data, iter - 1, 
+      cross_edges_placed?(solver_data.cube, solver_data.base_face)
+    )
+  end
+
+  defp find_next_cross_goal(solver_data = %{ cube: cube, base_face: face }) do
+    goal = Enum.find(
+      Enum.zip(cross_goal_state(face), current_state(cube, face)),
+      fn { g, c } -> g != c end
+    ) 
+    { solver_data, goal }
+  end
+
+  defp update_solver_data([], solver_data, _) do
+    solver_data 
+  end
+  defp update_solver_data(move_sequence, solver_data, goal) do
+    %{ solver_data |
+        cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
+        progress: solver_data.progress ++ [String.to_atom(String.upcase(goal))],
+        moves: solver_data.moves ++ solver_data.moves
+    }
+  end
+
+  defp complete_cross_goal( { solver_data, {goal, _} } ) do
+    Rubik.BFS.reach_goal(
+      solver_data,
+      String.to_atom(String.upcase(goal)),
+      @max_moves_per_bfs_search
+    )
+    |> update_solver_data(solver_data, goal)
+  end
+
+  defp cross_goal_state(face) do
+    Enum.map(Rubik.Solver.edges(face),
+      fn atom_edge -> String.downcase(Atom.to_string(atom_edge)) end
+    )
+  end
+
+  defp current_state(cube, face) do
+    Enum.map(Rubik.Solver.edges(face),
+      fn edge -> Map.get(cube, edge) end
+    ) 
   end
 
   defp cross_edges_placed?(cube, face) do
-    look_for = Enum.map(Rubik.Solver.edges(face),
-      fn atom_edge -> String.downcase(Atom.to_string(atom_edge)) end
-    )
-    current_edges_state = Enum.map(Rubik.Solver.edges(face),
-      fn edge -> Map.get(cube, edge) end
-    ) 
-    reorder_edges(current_edges_state, List.first(look_for)) == look_for
-  end
-
-  defp reorder_edges(edges = [h | _], first_edge) do
-    do_reorder(h == first_edge, [], edges, first_edge)
-  end
-
-  defp do_reorder(_first_edge_found = true, new_list, edges_rem, _) do
-    edges_rem ++ new_list
-  end
-  defp do_reorder(_first_edge_found = false, new_list, [h | tl], first_edge) do
-    do_reorder(h == first_edge, new_list ++ [h], tl, first_edge) 
-  end
-  defp do_reorder(_first_edge_found = false, _, [], _) do
-    []
+    current_state(cube, face) == cross_goal_state(face)
   end
 
 end

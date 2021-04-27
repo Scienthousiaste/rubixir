@@ -60,11 +60,19 @@ defmodule Rubik.Solver do
     #|> Rubik.SolveF2L.solve_first_two_lines
   end
 
+  defp compute_cross_progress(cube, base_face) do
+    Enum.filter(edges(base_face),
+      fn edge -> is_cubie_in_place?(Map.get(cube, edge), edge) end
+    )
+  end
+
   defp init_cfop_solver_data(cube) do
-     %Rubik.SolverData{
+    base_face = find_cfop_base_face(cube) 
+    %Rubik.SolverData{
       cube:       cube,
-      base_face:  find_cfop_base_face(cube),
-      moves:      []
+      base_face:  base_face,
+      moves:      [],
+      progress:   compute_cross_progress(cube, base_face)
     }
   end
 
