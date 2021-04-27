@@ -66,7 +66,7 @@ defmodule Rubik.Solver do
     )
   end
 
-  defp init_cfop_solver_data(cube) do
+  def init_cfop_solver_data(cube) do
     base_face = find_cfop_base_face(cube) 
     %Rubik.SolverData{
       cube:       cube,
