@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { OrbitControls } from "./OrbitControls.js";
 
-const DIM_CUBIE = 0.97;
+const DIM_CUBIE = 0.95;
 const SQUARE_CAMERA_FRUSTRUM = 300;
 const rubik3D = {};
 const dims = [0, 1, 2];
+const faces = ["R", "L", "U", "D", "F", "B"];
 const center_factor = ((DIM_CUBIE * dims.length) - DIM_CUBIE) / 2
 const cubieGeometry = new THREE.BoxGeometry(
 	DIM_CUBIE,
@@ -38,9 +39,8 @@ const initCamera = (rubik3D) => {
 	   -SQUARE_CAMERA_FRUSTRUM,
 	);
 	camera.zoom = 110;
-	camera.position.set(-10, 0, 0);
+	camera.position.set(10, 10, 10);
 	camera.near = 0.005;
-	camera.up.set(0, 0, 1);
 	camera.updateProjectionMatrix();
 	rubik3D.camera = camera;
 };
@@ -65,9 +65,8 @@ const addFunctions = (rubik3D) => {
 };
 
 const getCubieMaterials = (cubicle, cubie) => {
-	const faces = ["L", "R", "U", "D", "F", "B"];
 
-	return faces.map(
+	const materials = faces.map(
 		face => {
 			return (
 				cubicle.includes(face) ?
@@ -76,13 +75,15 @@ const getCubieMaterials = (cubicle, cubie) => {
 			);
 		}
 	);
+	console.log(cubicle, ": ", materials);
+	return materials;
 };
 
 const getCubiclePosition = (c) => {
 	return {
-		z: (c.includes("B")? 0 : (c.includes("F") ? 2 : 1)),
-		x: (c.includes("R")? 0 : (c.includes("L") ? 2 : 1)),
+		x: (c.includes("R")? 2 : (c.includes("L") ? 0 : 1)),
 		y: (c.includes("D")? 0 : (c.includes("U") ? 2 : 1)),
+		z: (c.includes("B")? 0 : (c.includes("F") ? 2 : 1)),
 	}
 };
 
@@ -110,17 +111,11 @@ const initCube = (rubik3D, cube) => {
 	const cubies = [];
 
 	for (let cubicle in cube) {
-		console.log(cubicle + ": " + cube[cubicle]);
 		cubies.push(makeCubie(cubicle, cube[cubicle], rubik3D));
 	}
-
-	cubies.push(makeCubie("F", "f", rubik3D));
-	cubies.push(makeCubie("R", "r", rubik3D));
-	cubies.push(makeCubie("L", "l", rubik3D));
-	cubies.push(makeCubie("U", "u", rubik3D));
-	cubies.push(makeCubie("D", "d", rubik3D));
-	cubies.push(makeCubie("B", "b", rubik3D));
-
+	for (let face of faces) {
+		cubies.push(makeCubie(face, face.toUpperCase(), rubik3D));
+	}
 	rubik3D.cubies = cubies;
 };
 
@@ -140,7 +135,6 @@ const animate = () => {
 }
 
 const initRubik3D = () => {
-	
 	const cube_dom = document.querySelector('#cube3D');
 	const cube = JSON.parse(cube_dom.dataset.cube);
 

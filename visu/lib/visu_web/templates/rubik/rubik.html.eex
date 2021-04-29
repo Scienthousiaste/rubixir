@@ -14,3 +14,7 @@
   <%= button("Scrambled Cube", to: Routes.rubik_path(@conn, :get_scrambled_cube)) %>
   <%= button("Solve Cross", to: Routes.rubik_path(@conn, :solve_cross)) %>
 </section>
+
+<section>
+  <%= button("Cube in cube in cube", to: Routes.rubik_path(@conn, :cube_in_cube_pattern)) %>
+</section>

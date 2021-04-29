@@ -30,4 +30,15 @@ defmodule VisuWeb.RubikController do
     |> render("rubik.html", cube: cube)
   end
 
+  def cube_in_cube_pattern(conn, _params) do
+    cube = Rubik.qturns(Rubik.new_cube(), [
+      "U'", "L'", "U'", "F'", "R2", "B'", "R", "F", "U", "B2", 
+      "U", "B'", "L", "U'", "F", "U", "R", "F'"
+    ])
+
+    conn
+    |> put_session(:cube, cube)
+    |> render("rubik.html", cube: cube)
+  end
+
 end
