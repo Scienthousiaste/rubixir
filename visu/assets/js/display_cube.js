@@ -40,6 +40,7 @@ const initCamera = (rubik3D) => {
 	camera.zoom = 110;
 	camera.position.set(-10, 0, 0);
 	camera.near = 0.005;
+	camera.up.set(0, 0, 1);
 	camera.updateProjectionMatrix();
 	rubik3D.camera = camera;
 };

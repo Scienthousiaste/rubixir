@@ -17,9 +17,11 @@ defmodule VisuWeb.Router do
     pipe_through :browser
 
     get "/", RubikController, :init_rubik
-    post "/", RubikController, :init_rubik
 
+    post "/", RubikController, :init_rubik
     post "/move/:move", RubikController, :make_move
+    post "/scrambled", RubikController, :get_scrambled_cube
+    post "/solve_cross", RubikController, :solve_cross
   end
 
 end

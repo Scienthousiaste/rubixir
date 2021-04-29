@@ -11,4 +11,6 @@
 
 <section>
   <%= button("New Game", to: Routes.rubik_path(@conn, :init_rubik)) %>
+  <%= button("Scrambled Cube", to: Routes.rubik_path(@conn, :get_scrambled_cube)) %>
+  <%= button("Solve Cross", to: Routes.rubik_path(@conn, :solve_cross)) %>
 </section>
