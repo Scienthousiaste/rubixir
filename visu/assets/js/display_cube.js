@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "./OrbitControls.js";
 
-const DIM_CUBIE = 0.99;
+const DIM_CUBIE = 0.97;
 const SQUARE_CAMERA_FRUSTRUM = 300;
 const rubik3D = {};
 const dims = [0, 1, 2];
@@ -12,14 +12,15 @@ const cubieGeometry = new THREE.BoxGeometry(
 	DIM_CUBIE,
 );
 
-const cubieMaterials =[
-	new THREE.MeshBasicMaterial({ color: 0xffaa00}),
-	new THREE.MeshBasicMaterial({ color: 0xcd1010}),
-	new THREE.MeshBasicMaterial({ color: 0xffff00}),
-	new THREE.MeshBasicMaterial({ color: 0xfbfbfb}),
-	new THREE.MeshBasicMaterial({ color: 0x1010cd}),
-	new THREE.MeshBasicMaterial({ color: 0x10cd10}),
-];
+const cubieMaterials = {
+	"L": new THREE.MeshBasicMaterial({ color: 0xffaa00}),
+	"R": new THREE.MeshBasicMaterial({ color: 0xcd1010}),
+	"U": new THREE.MeshBasicMaterial({ color: 0xffff00}),
+	"D": new THREE.MeshBasicMaterial({ color: 0xfbfbfb}),
+	"F": new THREE.MeshBasicMaterial({ color: 0x1010cd}),
+	"B": new THREE.MeshBasicMaterial({ color: 0x10cd10}),
+	"x": new THREE.MeshBasicMaterial({ color: 0x101010}),
+};
 
 const initRenderer = (rubik3D) => {
 	const renderer = new THREE.WebGLRenderer({ alpha: false });
@@ -62,35 +63,63 @@ const addFunctions = (rubik3D) => {
 	};
 };
 
-const makeCubie = (x, y, z, rubik3D) => {
-	if (!rubik3D.cubie_number) rubik3D.cubie_number = 0;
-	rubik3D.cubie_number++;
+const getCubieMaterials = (cubicle, cubie) => {
+	const faces = ["L", "R", "U", "D", "F", "B"];
 
-	const cubie = new THREE.Mesh(cubieGeometry, cubieMaterials);
-	cubie.name = "cubie" + rubik3D.cubie_number;
-	cubie.position.set(
-		x - center_factor,
-		y - center_factor,
-		z - center_factor
+	return faces.map(
+		face => {
+			return (
+				cubicle.includes(face) ?
+		  		cubieMaterials[cubie[cubicle.indexOf(face)].toUpperCase()] :
+				cubieMaterials["x"]
+			);
+		}
 	);
-
-	cubie.initialPosition = {x, y, z};
-	rubik3D.scene.add(cubie);
-	return cubie;
 };
 
-const initCube = (rubik3D) => {
+const getCubiclePosition = (c) => {
+	return {
+		z: (c.includes("B")? 0 : (c.includes("F") ? 2 : 1)),
+		x: (c.includes("R")? 0 : (c.includes("L") ? 2 : 1)),
+		y: (c.includes("D")? 0 : (c.includes("U") ? 2 : 1)),
+	}
+};
+
+const makeCubie = (cubicle, cubie, rubik3D) => {
+
+	const cubicle3D = new THREE.Mesh(
+		cubieGeometry,
+		getCubieMaterials(cubicle, cubie)
+	);
+	cubicle3D.name = cubicle;
+
+	const cubiclePosition = getCubiclePosition(cubicle);
+
+	cubicle3D.position.set(
+		cubiclePosition.x - center_factor,
+		cubiclePosition.y - center_factor,
+		cubiclePosition.z - center_factor,
+	);
+
+	rubik3D.scene.add(cubicle3D);
+	return cubicle3D;
+};
+
+const initCube = (rubik3D, cube) => {
 	const cubies = [];
 
-	for (let x of dims) {
-		for (let y of dims) {
-			for (let z of dims) {
-				if (!(x === 1 && y === 1 && z ===1)) {
-					cubies.push(makeCubie(x, y, z, rubik3D));	
-				}
-			}
-		}
+	for (let cubicle in cube) {
+		console.log(cubicle + ": " + cube[cubicle]);
+		cubies.push(makeCubie(cubicle, cube[cubicle], rubik3D));
 	}
+
+	cubies.push(makeCubie("F", "f", rubik3D));
+	cubies.push(makeCubie("R", "r", rubik3D));
+	cubies.push(makeCubie("L", "l", rubik3D));
+	cubies.push(makeCubie("U", "u", rubik3D));
+	cubies.push(makeCubie("D", "d", rubik3D));
+	cubies.push(makeCubie("B", "b", rubik3D));
+
 	rubik3D.cubies = cubies;
 };
 
@@ -110,34 +139,18 @@ const animate = () => {
 }
 
 const initRubik3D = () => {
+	
+	const cube_dom = document.querySelector('#cube3D');
+	const cube = JSON.parse(cube_dom.dataset.cube);
+
 	initScene(rubik3D);
 	initRenderer(rubik3D);
 	initContainer(rubik3D);
 	initCamera(rubik3D);	
-	initCube(rubik3D);
+	initCube(rubik3D, cube);
 	initControls(rubik3D);
 	addFunctions(rubik3D);
 	animate();
-};
-
-const makeMove = (move) => {
-	const group = new THREE.Group();
-	switch(move) {
-		case "U":
-			const cb_U = rubik3D.cubies.filter(cb => cb.initialPosition.y == 2);
-			console.log("cb_U", cb_U);
-			for (const cb of cb_U) {
-				group.add(cb);	
-			}
-			console.log("GROUP", group);
-			group.rotation.y += 1;
-			rubik3D.scene.add(group);
-			break;
-		case "R":
-			break;
-		default:
-			;
-	}
 };
 
 initRubik3D();

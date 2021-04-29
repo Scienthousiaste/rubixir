@@ -5,9 +5,10 @@ defmodule Rubik do
   defdelegate scrambled_cube(),             to: Rubik.Cube
   defdelegate scrambled_cube(number_moves), to: Rubik.Cube
   defdelegate is_solved?(cube),             to: Rubik.Cube
+  defdelegate get_moves(),                  to: Rubik.Cube, as: :moves
 
-  defdelegate move(cube, move),             to: Rubik.Transforms, as: :qturn 
-  defdelegate moves(cube, move_list),       to: Rubik.Transforms, as: :qturns
+  defdelegate qturn(cube, move),             to: Rubik.Transforms
+  defdelegate qturns(cube, move_list),       to: Rubik.Transforms
 
   defdelegate solve_cube(cube),             to: Rubik.Solver
 

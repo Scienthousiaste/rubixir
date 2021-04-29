@@ -1,3 +1,14 @@
 <h1>Rubixir</h1>
 
-<div id="cube3D"></div>
+<div id="cube3D" 
+  data-cube="<%= Jason.encode!(Map.from_struct(@cube)) %>"></div>
+
+<section>
+  <%= for move <- Rubik.get_moves() do%>
+    <%= button(move, to: Routes.rubik_path(@conn, :make_move, move)) %>
+  <% end %>
+</section>
+
+<section>
+  <%= button("New Game", to: Routes.rubik_path(@conn, :init_rubik)) %>
+</section>
