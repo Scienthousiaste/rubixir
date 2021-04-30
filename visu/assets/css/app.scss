@@ -1,5 +1,4 @@
 /* This file is for your main application css. */
-@import "./phoenix.css";
 
 /* Alerts and form errors */
 .alert {
@@ -33,4 +32,24 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+    background-color: #0069d9;
+    border: 0.1rem solid #0069d9;
+    border-radius: .4rem;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    height: 3.8rem;
+    letter-spacing: .1rem;
+    line-height: 3.8rem;
+    padding: 0 3.0rem;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
 }

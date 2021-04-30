@@ -1,16 +1,25 @@
 <h1>Rubixir</h1>
 
 <div id="cube3D" 
-  data-cube="<%= Jason.encode!(Map.from_struct(@cube)) %>"></div>
+  data-cube="<%= Jason.encode!(Map.from_struct(@cube)) %>">
+</div>
 
-<section>
+
+<p>
+<%= IO.inspect String.replace(
+  String.replace(Jason.encode!(Map.from_struct(@cube)), 
+  ",", "\n"),"\"", "") %>
+
+</p>
+
+<section class="move-buttons">
   <%= for move <- Rubik.get_moves() do%>
     <%= button(move, to: Routes.rubik_path(@conn, :make_move, move)) %>
   <% end %>
 </section>
 
 <section>
-  <%= button("New Game", to: Routes.rubik_path(@conn, :init_rubik)) %>
+  <%= button("Solved Cube", to: Routes.rubik_path(@conn, :init_rubik)) %>
   <%= button("Scrambled Cube", to: Routes.rubik_path(@conn, :get_scrambled_cube)) %>
   <%= button("Solve Cross", to: Routes.rubik_path(@conn, :solve_cross)) %>
 </section>
