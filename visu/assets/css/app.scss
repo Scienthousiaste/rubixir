@@ -1,55 +1,27 @@
-/* This file is for your main application css. */
 
-/* Alerts and form errors */
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-.alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
-}
-.alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
-}
-.alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
-}
-.alert p {
-  margin-bottom: 0;
-}
-.alert:empty {
-  display: none;
-}
-.invalid-feedback {
-  color: #a94442;
-  display: block;
-  margin: -1rem 0 2rem;
+.move-buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 250px;
 }
 
-
-button, input[type="button"], input[type="reset"], input[type="submit"] {
+.action-button {
     background-color: #0069d9;
-    border: 0.1rem solid #0069d9;
     border-radius: .4rem;
     color: #fff;
     cursor: pointer;
-    display: inline-block;
-    font-size: 1.1rem;
-    font-weight: 700;
-    height: 3.8rem;
-    letter-spacing: .1rem;
-    line-height: 3.8rem;
-    padding: 0 3.0rem;
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    white-space: nowrap;
+	line-height: 2em;
+	text-align: center;
+	margin: 3px;
+	font-family: Roboto, sans-serif;
+	max-width: 150px;
+}
+
+.move-button {
+	width: 30%;
+}
+
+.action-button:hover {
+    background-color: #0092ff;
 }
