@@ -1,12 +1,22 @@
 
-export default function bindButtonToActions(rubik3D) {
+export default function bindButtonToActions(rubikSocket) {
 
 	const moveButtons = document.querySelectorAll(".move-button")
 
 	for (const moveButton of moveButtons) {
 		moveButton.onclick = () => {
-			console.log(moveButton.innerHTML)	
-			rubik3D.makeMove(moveButton.innerHTML)
+			rubikSocket.makeMove(moveButton.innerHTML)
 		}
 	}
+
+	const getSolvedCubeButton = document.querySelector("#get_solved_cube")
+	getSolvedCubeButton.onclick = () => {
+		rubikSocket.fetchSolvedCube()
+	}
+
+	const getScrambledCubeButton = document.querySelector("#get_scrambled_cube")
+	getScrambledCubeButton.onclick = () => {
+		rubikSocket.fetchScrambledCube()
+	}
+
 }

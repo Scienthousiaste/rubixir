@@ -11,5 +11,6 @@
 </section>
 
 <section>
-  <%= make_action_button("Solved Cube") %>
+  <%= make_action_button("Solved Cube", :get_solved_cube) %>
+  <%= make_action_button("Scrambled Cube", :get_scrambled_cube) %>
 </section>

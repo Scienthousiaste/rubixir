@@ -8,9 +8,9 @@ defmodule VisuWeb.RubikView do
     |> raw
   end
 
-  def make_action_button(text) do
+  def make_action_button(text, button_id) do
     """
-      <div class="action-button">#{text}</div>
+      <div class="action-button" id=#{button_id}>#{text}</div>
     """
     |> raw
 

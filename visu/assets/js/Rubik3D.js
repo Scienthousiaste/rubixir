@@ -72,9 +72,7 @@ export default class Rubik3D {
 	}
 
 	renameCubies(move, rubik3D) {
-
 		const transformation = TRANSFORMATIONS[move.charAt(0)]
-
 		if (FACES.includes(move)) {
 			this.cubies = makeTransformation(this.cubies, transformation)
 		}
@@ -92,5 +90,16 @@ export default class Rubik3D {
 				transformation
 			)	
 		}
+	}
+
+	purgeScene() {
+		for (let cubie of this.cubies) {
+			this.scene.remove(cubie)
+		}
+	}
+
+	reinitializeCube(cube) {
+		this.purgeScene()
+		this.cubies = initCube(this, cube)
 	}
 }

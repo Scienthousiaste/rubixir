@@ -10,12 +10,12 @@ export default class RubikSocket {
 	
 	connectToRubik() {
 		this.setupChannel()
-		this.channel.on("cube", cube => {
-			console.log("cube received in connectToRubik")
-			console.dir(cube)	
+		this.channel.on("new_cube", msg => {
+			console.log("Cube received")
+			this.rubik3D.reinitializeCube(msg.cube)
 		})
 		this.channel.on("move", msg => {
-			console.log("received a move in connectToRubik")
+			console.log("Move received: " + msg.move)
 			this.rubik3D.animateMove(msg.move, msg.cube)
 		})
 	}
@@ -25,17 +25,19 @@ export default class RubikSocket {
 		this.channel
 			.join()
 			.receive("ok", resp => {
-				console.log("Connected: ")
-				console.dir(resp)
-				this.fetchCube()
+				console.log("Connected to socket rubik:cube")
 			})
 			.receive("error", resp => {
 				alert("An error occurred: " + resp)
 			})
 	}
 
-	fetchCube() {
-		this.channel.push("get_cube", {})
+	fetchSolvedCube() {
+		this.channel.push("get_solved_cube", {})
+	}
+
+	fetchScrambledCube() {
+		this.channel.push("get_scrambled_cube", {})
 	}
 
 	makeMove(move) {
