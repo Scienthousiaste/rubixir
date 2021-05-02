@@ -10,34 +10,20 @@ import {
 } from "./init_three.js"
 
 import {
-	FACES,
+	angleFromMove,
+	getCube,
+	transformNTimes,
+	isRegularMove,
+	isDoubleMove,
+	isReverseMove,
+} from "./helpers.js"
+
+import {
 	FACE_TO_AXIS,
-	QUARTER_TURN,
 	TRANSFORMATIONS,
 	MOVE_ANIMATION_DURATION,
 } from "./constants_3D.js"
 
-
-const moveToAngle = (move) => {
-	if (move.length == 2) {
-		return (move.charAt(1) == "'" ? -QUARTER_TURN : 2 * QUARTER_TURN)
-	}
-	return QUARTER_TURN
-}
-
-const getCube = () => {
-	const cube_dom = document.querySelector('#cube3D')
-	return (JSON.parse(cube_dom.dataset.cube))
-}
-
-const makeTransformation = (cubies, transformation) => {
-	return cubies.map(cubie => {
-		if (transformation[cubie.name]) {
-			cubie.name = transformation[cubie.name];
-		}
-		return cubie
-	})
-}
 
 export default class Rubik3D {
 
@@ -49,65 +35,63 @@ export default class Rubik3D {
 		this.cubies = initCube(this, getCube())
 		this.controls = initControls(this)
 
-		this.animationRunning = false
-		this.queueAnimations = []
-		this.faceCubie = null
+		this.remainingAnimations = []
+		this.initAnimationData()
+	}
+
+	initAnimationData() {
 		this.cubiesToMove = []
+		this.animationRunning = false
+		this.faceCubie = null
 		this.startAnimationTime = null
 		this.lastFrameTime = null
-
 		this.animationRotationAxis = null
 		this.animationTotalAngle = null
 		this.animationCurrentAngle = null
 		this.animationMove = null
 	}
 
-
 	renderScene(timeSinceBeginning) {
 		if (this.animationRunning) {
-
 			const timeDelta = Date.now() - this.startAnimationTime
-			console.log("here, timeDelta", timeDelta, this.animationRunning)
 			
 			if (timeDelta > MOVE_ANIMATION_DURATION) {
-
-				this.faceCubie.rotateOnWorldAxis(
-					this.animationRotationAxis,
-					(this.animationTotalAngle - this.animationCurrentAngle)
-				)
-				this.endCurrentAnimation()				
+				this.concludeAnimation()	
 			}
 			else {
-
-				const proportionAngleToCoverThisFrame =
-					(timeSinceBeginning - this.lastFrameTime) / MOVE_ANIMATION_DURATION
-				
-				const angleCoveredThisFrame = proportionAngleToCoverThisFrame * this.animationTotalAngle	
-				this.faceCubie.rotateOnWorldAxis(this.animationRotationAxis, angleCoveredThisFrame)
-				this.animationCurrentAngle += angleCoveredThisFrame
-
+				this.computeNextAnimationStep(timeSinceBeginning - this.lastFrameTime)
 			}
 		}
 		this.renderer.render(this.scene, this.camera)
 		this.lastFrameTime = timeSinceBeginning
 	}
 
+	computeNextAnimationStep(frameTime) {
+		const proportionAngleToCoverNow = frameTime / MOVE_ANIMATION_DURATION
+		const angleCoveredThisFrame = proportionAngleToCoverNow * this.animationTotalAngle	
+		this.faceCubie.rotateOnWorldAxis(this.animationRotationAxis, angleCoveredThisFrame)
+		this.animationCurrentAngle += angleCoveredThisFrame
+	}
+
+	concludeAnimation() {
+		this.faceCubie.rotateOnWorldAxis(
+			this.animationRotationAxis,
+			(this.animationTotalAngle - this.animationCurrentAngle)
+		)
+		this.endCurrentAnimation()				
+	}
+
 	endCurrentAnimation() {
 		this.cubiesToMove.forEach(cubie => {
 			this.scene.attach(cubie)
 		})
-		this.renameCubies(this.animationMove)
+		this.updateCubies(this.animationMove)
 		
-		this.animationRunning = false
-		this.animationMove = null
-		this.faceCubie = null
-		this.cubiesToMove = []
-		this.startAnimationTime = null
-		this.animationTotalAngle = null
-		this.animationCurrentAngle = null
-		this.animationRotationAxis = null
+		this.initAnimationData()
 
-		//check queueAnimations?
+		if (this.remainingAnimations.length > 0) {
+			this.startAnimation(this.remainingAnimations.pop())
+		}
 	}
 
 	startAnimation(move) {
@@ -123,41 +107,31 @@ export default class Rubik3D {
 		})
 		this.animationMove = move
 		this.animationRotationAxis = FACE_TO_AXIS[face]
-		this.animationTotalAngle = moveToAngle(move)
+		this.animationTotalAngle = angleFromMove(move)
 		this.animationCurrentAngle = 0
 		this.startAnimationTime = Date.now()
 		this.animationRunning = true
 	}
 
-	animateMove(move, newCube) {
+	animateMove(move) {
 		if (!this.animationRunning) {
 			this.startAnimation(move)
 		}
-		/*
 		else {
-			this.queueAnimations.push({move: move})
+			this.remainingAnimations.unshift(move)
 		}
-		*/
 	}
 
-	renameCubies(move, rubik3D) {
+	updateCubies(move, rubik3D) {
 		const transformation = TRANSFORMATIONS[move.charAt(0)]
-		if (FACES.includes(move)) {
-			this.cubies = makeTransformation(this.cubies, transformation)
+		if (isRegularMove(move)) {
+			this.cubies = transformNTimes(this.cubies, transformation, 1)
 		}
-		else if (FACES.includes(move.charAt(0)) && move.charAt(1) === "2") {
-			this.cubies = makeTransformation(
-				makeTransformation(this.cubies, transformation),
-				transformation
-			)	
+		else if (isDoubleMove(move)) {
+			this.cubies = transformNTimes(this.cubies, transformation, 2)
 		}
-		else if (FACES.includes(move.charAt(0)) && move.charAt(1) === "'") {
-			this.cubies = makeTransformation(
-				makeTransformation(
-				makeTransformation(this.cubies, transformation),
-				transformation),
-				transformation
-			)	
+		else if (isReverseMove(move)) {
+			this.cubies = transformNTimes(this.cubies, transformation, 3)
 		}
 	}
 
@@ -167,8 +141,13 @@ export default class Rubik3D {
 		}
 	}
 
-	reinitializeCube(cube) {
+	purgeState() {
+		this.initAnimationData()
 		this.purgeScene()
+	}
+
+	reinitializeCube(cube) {
+		this.purgeState()
 		this.cubies = initCube(this, cube)
 	}
 }

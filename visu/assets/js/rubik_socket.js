@@ -16,7 +16,7 @@ export default class RubikSocket {
 		})
 		this.channel.on("move", msg => {
 			console.log("Move received: " + msg.move)
-			this.rubik3D.animateMove(msg.move, msg.cube)
+			this.rubik3D.animateMove(msg.move)
 		})
 	}
 

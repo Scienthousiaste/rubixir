@@ -66,4 +66,4 @@ export const TRANSFORMATIONS = {
 }
 
 
-export const MOVE_ANIMATION_DURATION = 500
+export const MOVE_ANIMATION_DURATION = 1000
