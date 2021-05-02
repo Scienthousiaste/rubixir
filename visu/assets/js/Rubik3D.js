@@ -14,6 +14,7 @@ import {
 	FACE_TO_AXIS,
 	QUARTER_TURN,
 	TRANSFORMATIONS,
+	MOVE_ANIMATION_DURATION,
 } from "./constants_3D.js"
 
 
@@ -47,28 +48,96 @@ export default class Rubik3D {
 		this.camera = initCamera(this)	
 		this.cubies = initCube(this, getCube())
 		this.controls = initControls(this)
+
+		this.animationRunning = false
+		this.queueAnimations = []
+		this.faceCubie = null
+		this.cubiesToMove = []
+		this.startAnimationTime = null
+		this.lastFrameTime = null
+
+		this.animationRotationAxis = null
+		this.animationTotalAngle = null
+		this.animationCurrentAngle = null
+		this.animationMove = null
 	}
 
-	renderScene() {
+
+	renderScene(timeSinceBeginning) {
+		if (this.animationRunning) {
+
+			const timeDelta = Date.now() - this.startAnimationTime
+			console.log("here, timeDelta", timeDelta, this.animationRunning)
+			
+			if (timeDelta > MOVE_ANIMATION_DURATION) {
+
+				this.faceCubie.rotateOnWorldAxis(
+					this.animationRotationAxis,
+					(this.animationTotalAngle - this.animationCurrentAngle)
+				)
+				this.endCurrentAnimation()				
+			}
+			else {
+
+				const proportionAngleToCoverThisFrame =
+					(timeSinceBeginning - this.lastFrameTime) / MOVE_ANIMATION_DURATION
+				
+				const angleCoveredThisFrame = proportionAngleToCoverThisFrame * this.animationTotalAngle	
+				this.faceCubie.rotateOnWorldAxis(this.animationRotationAxis, angleCoveredThisFrame)
+				this.animationCurrentAngle += angleCoveredThisFrame
+
+			}
+		}
 		this.renderer.render(this.scene, this.camera)
+		this.lastFrameTime = timeSinceBeginning
+	}
+
+	endCurrentAnimation() {
+		this.cubiesToMove.forEach(cubie => {
+			this.scene.attach(cubie)
+		})
+		this.renameCubies(this.animationMove)
+		
+		this.animationRunning = false
+		this.animationMove = null
+		this.faceCubie = null
+		this.cubiesToMove = []
+		this.startAnimationTime = null
+		this.animationTotalAngle = null
+		this.animationCurrentAngle = null
+		this.animationRotationAxis = null
+
+		//check queueAnimations?
+	}
+
+	startAnimation(move) {
+		const face = move.charAt(0)
+		this.faceCubie = this.cubies.find(cubie => {
+			return cubie.name === face
+		})
+		this.cubiesToMove = this.cubies.filter(cubie => {
+			return ((cubie.name !== face) && cubie.name.includes(face))
+		})
+		this.cubiesToMove.forEach(cubie => {
+			this.faceCubie.attach(cubie)
+		})
+		this.animationMove = move
+		this.animationRotationAxis = FACE_TO_AXIS[face]
+		this.animationTotalAngle = moveToAngle(move)
+		this.animationCurrentAngle = 0
+		this.startAnimationTime = Date.now()
+		this.animationRunning = true
 	}
 
 	animateMove(move, newCube) {
-		const face = move.charAt(0)
-		const faceCubie = this.cubies.find(cubie => {
-			return cubie.name === face
-		})
-		const cubiesToMove = this.cubies.filter(cubie => {
-			return ((cubie.name !== face) && cubie.name.includes(face))
-		})
-		cubiesToMove.forEach(cubie => {
-			faceCubie.attach(cubie)
-		})
-		faceCubie.rotateOnWorldAxis(FACE_TO_AXIS[face], moveToAngle(move))
-		cubiesToMove.forEach(cubie => {
-			this.scene.attach(cubie)
-		})
-		this.renameCubies(move)
+		if (!this.animationRunning) {
+			this.startAnimation(move)
+		}
+		/*
+		else {
+			this.queueAnimations.push({move: move})
+		}
+		*/
 	}
 
 	renameCubies(move, rubik3D) {

@@ -64,3 +64,6 @@ export const TRANSFORMATIONS = {
 		"UL": "LF", "LF": "DL", "DL": "LB", "LB": "UL"
 	}
 }
+
+
+export const MOVE_ANIMATION_DURATION = 500

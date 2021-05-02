@@ -6,9 +6,9 @@ import bindButtonToActions from "./UI.js"
 import RubikSocket from "./rubik_socket.js"
 
 let rubik3D = {}
-const animate = () => {
+const animate = (timeSinceBeginning) => {
 	requestAnimationFrame(animate)
-	rubik3D.renderer.render(rubik3D.scene, rubik3D.camera)
+	rubik3D.renderScene(timeSinceBeginning)
 }
 
 window.onload = function() {
