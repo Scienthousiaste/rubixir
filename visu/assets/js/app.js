@@ -2,7 +2,7 @@ import "../css/app.scss"
 import "phoenix_html"
 
 import Rubik3D from "./Rubik3D.js"
-import bindButtonToActions from "./UI.js"
+import { bindButtonToActions } from "./UI.js"
 import RubikSocket from "./rubik_socket.js"
 
 let rubik3D = {}

@@ -1,5 +1,5 @@
 
-export default function bindButtonToActions(rubikSocket) {
+export function bindButtonToActions(rubikSocket) {
 
 	const moveButtons = document.querySelectorAll(".move-button")
 
@@ -19,4 +19,14 @@ export default function bindButtonToActions(rubikSocket) {
 		rubikSocket.fetchScrambledCube()
 	}
 
+}
+
+export function displayRemainingAnimations(remainingAnimations) {
+	const element = document.querySelector("#remaining-animations")
+	if (remainingAnimations.length == 0) {
+		element.textContent = ""
+	}
+	else {
+		element.textContent = "Remaining moves: " + JSON.stringify(remainingAnimations)
+	}
 }

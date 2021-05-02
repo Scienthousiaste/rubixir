@@ -19,6 +19,10 @@ import {
 } from "./helpers.js"
 
 import {
+	displayRemainingAnimations
+} from "./UI.js"
+
+import {
 	FACE_TO_AXIS,
 	TRANSFORMATIONS,
 	MOVE_ANIMATION_DURATION,
@@ -35,7 +39,7 @@ export default class Rubik3D {
 		this.cubies = initCube(this, getCube())
 		this.controls = initControls(this)
 
-		this.remainingAnimations = []
+		this.setRemainingAnimations([])
 		this.initAnimationData()
 	}
 
@@ -49,6 +53,11 @@ export default class Rubik3D {
 		this.animationTotalAngle = null
 		this.animationCurrentAngle = null
 		this.animationMove = null
+	}
+
+	setRemainingAnimations(newValue) {
+		this.remainingAnimations = [...newValue]
+		displayRemainingAnimations(this.remainingAnimations)
 	}
 
 	renderScene(timeSinceBeginning) {
@@ -86,11 +95,12 @@ export default class Rubik3D {
 			this.scene.attach(cubie)
 		})
 		this.updateCubies(this.animationMove)
-		
 		this.initAnimationData()
 
 		if (this.remainingAnimations.length > 0) {
-			this.startAnimation(this.remainingAnimations.pop())
+			const animToStart = this.remainingAnimations[0]
+			this.setRemainingAnimations([...this.remainingAnimations.slice(1)])
+			this.startAnimation(animToStart)
 		}
 	}
 
@@ -118,7 +128,7 @@ export default class Rubik3D {
 			this.startAnimation(move)
 		}
 		else {
-			this.remainingAnimations.unshift(move)
+			this.setRemainingAnimations(this.remainingAnimations.concat([move]))
 		}
 	}
 
@@ -143,6 +153,7 @@ export default class Rubik3D {
 
 	purgeState() {
 		this.initAnimationData()
+		this.setRemainingAnimations([])
 		this.purgeScene()
 	}
 
