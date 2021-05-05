@@ -1,4 +1,9 @@
 
+.global-layout {
+	display: flex;
+	flex-direction: row;
+}
+
 .move-buttons {
 	display: flex;
 	flex-direction: row;
@@ -25,3 +30,17 @@
 .action-button:hover {
     background-color: #0092ff;
 }
+
+
+.sequence-button-container {
+	border: black 1px dotted;
+}
+
+.remove-sequence {
+	width: 15px;
+	height: 15px;
+	text-align: center;
+	background-color: red;
+	cursor: pointer;
+}
+

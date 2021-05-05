@@ -1,17 +1,37 @@
 <h1>Rubixir</h1>
 
-<div id="cube3D" 
-  data-cube="<%= json_encode(@cube) %>">
+<div class="global-layout">
+  <div class="column">
+    <div id="cube3D" 
+      data-cube="<%= json_encode(@cube) %>">
+    </div>
+
+
+    <section>
+      <div id="remaining-animations"></div>
+      <%= make_action_button("Solved Cube", :get_solved_cube) %>
+      <%= make_action_button("Scrambled Cube", :get_scrambled_cube) %>
+      <%= make_action_button("Solve Cross", :solve_cross) %>
+      <%= make_action_button("Cube in cube in cube", :cube_in_cube_pattern) %>
+      <input type="range" id="moveAnimationDuration" min="10" max="2000" value="500" step="5">
+      <div id="moveAnimationValue">500</div>
+    </section>
+
+    <section class="move-buttons">
+      <%= for move <- Rubik.get_moves() do %>
+        <%= make_move_button(move) %>
+      <% end %>
+    </section>
+
+  </div>
+
+  <div class="column">
+
+    <section>
+      <textarea id="move_sequence_input"></textarea>
+      <%= make_action_button("Save input sequence", :save_input_sequence) %>
+      <div id="sequence_buttons_container"></div>
+    </section>
+
+  </div>
 </div>
-
-<section class="move-buttons">
-  <%= for move <- Rubik.get_moves() do %>
-    <%= make_move_button(move) %>
-  <% end %>
-</section>
-
-<section>
-  <div id="remaining-animations"></div>
-  <%= make_action_button("Solved Cube", :get_solved_cube) %>
-  <%= make_action_button("Scrambled Cube", :get_scrambled_cube) %>
-</section>

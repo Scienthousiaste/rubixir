@@ -55,9 +55,9 @@ defmodule Rubik.Solver do
   end
 
   def solve_with(cube, :CFOP) do
-    init_cfop_solver_data(cube)
+    sd = init_cfop_solver_data(cube)
     |> Rubik.SolveCross.solve_cross
-    #|> Rubik.SolveF2L.solve_first_two_lines
+    |> Rubik.SolveF2L.solve_f2l
   end
 
   defp compute_cross_progress(cube, base_face) do

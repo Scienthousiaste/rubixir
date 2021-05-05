@@ -87,15 +87,4 @@ defmodule RubikTest do
     assert cube == Cube.new_cube()
   end
 
-  test "With CFOP, the cross on the base_face is solved after cross_solve" do
-    #Randomised test
-    solver_data = Rubik.Cube.scrambled_cube()
-      |> Rubik.Solver.init_cfop_solver_data
-      |> Rubik.SolveCross.solve_cross
-    assert Enum.all?(Rubik.Solver.edges(solver_data.base_face), fn edge ->
-        String.to_atom(String.upcase(Map.get(solver_data.cube, edge))) == edge
-      end
-    )
-  end
-
 end

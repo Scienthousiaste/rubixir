@@ -25,7 +25,7 @@ import {
 import {
 	FACE_TO_AXIS,
 	TRANSFORMATIONS,
-	MOVE_ANIMATION_DURATION,
+	DEFAULT_MOVE_ANIMATION_DURATION,
 } from "./constants_3D.js"
 
 
@@ -38,6 +38,7 @@ export default class Rubik3D {
 		this.camera = initCamera(this)	
 		this.cubies = initCube(this, getCube())
 		this.controls = initControls(this)
+		this.moveAnimationDuration = DEFAULT_MOVE_ANIMATION_DURATION
 
 		this.setRemainingAnimations([])
 		this.initAnimationData()
@@ -60,11 +61,15 @@ export default class Rubik3D {
 		displayRemainingAnimations(this.remainingAnimations)
 	}
 
+	setMoveAnimationDuration(newValue) {
+		this.moveAnimationDuration = newValue > 10 ? newValue : 10
+	}
+
 	renderScene(timeSinceBeginning) {
 		if (this.animationRunning) {
 			const timeDelta = Date.now() - this.startAnimationTime
 			
-			if (timeDelta > MOVE_ANIMATION_DURATION) {
+			if (timeDelta > this.moveAnimationDuration) {
 				this.concludeAnimation()	
 			}
 			else {
@@ -76,7 +81,7 @@ export default class Rubik3D {
 	}
 
 	computeNextAnimationStep(frameTime) {
-		const proportionAngleToCoverNow = frameTime / MOVE_ANIMATION_DURATION
+		const proportionAngleToCoverNow = frameTime / this.moveAnimationDuration
 		const angleCoveredThisFrame = proportionAngleToCoverNow * this.animationTotalAngle	
 		this.faceCubie.rotateOnWorldAxis(this.animationRotationAxis, angleCoveredThisFrame)
 		this.animationCurrentAngle += angleCoveredThisFrame
@@ -128,7 +133,15 @@ export default class Rubik3D {
 			this.startAnimation(move)
 		}
 		else {
-			this.setRemainingAnimations(this.remainingAnimations.concat([move]))
+			this.setRemainingAnimations(
+				this.remainingAnimations.concat([move])
+			)
+		}
+	}
+
+	animateMoveSequence(moves) {
+		for (const move of moves) {
+			this.animateMove(move)
 		}
 	}
 
@@ -160,5 +173,10 @@ export default class Rubik3D {
 	reinitializeCube(cube) {
 		this.purgeState()
 		this.cubies = initCube(this, cube)
+	}
+
+	isValidSequence(sequence) {
+		//TODO
+		return true
 	}
 }

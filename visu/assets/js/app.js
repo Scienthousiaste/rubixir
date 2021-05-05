@@ -15,7 +15,7 @@ window.onload = function() {
 	rubik3D = new Rubik3D()
 	let rubikSocket = new RubikSocket(rubik3D)
 	rubikSocket.connectToRubik()
-	bindButtonToActions(rubikSocket)
+	bindButtonToActions(rubikSocket, rubik3D)
 	animate()
 }
 

@@ -10,7 +10,6 @@ defmodule VisuWeb.RubikChannel do
 
   def handle_in("make_move", params, socket) do
     cube = Rubik.qturn(socket.assigns.cube, params["move"])
-    # IL FAUT RECUP EN CAS D'ERREUR DU QTURN
     socket = assign(socket, :cube, cube)
     push(socket, "move", %{move: params["move"], cube: Map.from_struct(cube)})
     { :noreply, socket }
@@ -30,6 +29,34 @@ defmodule VisuWeb.RubikChannel do
     { :noreply, socket }
   end
 
+  def handle_in("solve_cross", _params, socket) do
+    %{cube: cube, moves: moves} = Rubik.solve_cube(socket.assigns.cube)
+    socket = assign(socket, :cube, cube)
+    push(socket, "move_sequence", %{moves: moves})
+    { :noreply, socket }
+  end
+
+  def handle_in("move_sequence", params, socket) do
+    move_sequence = String.split(params["move_sequence"], " ")
+    #move_sequence = String.replace(params["move_sequence"], ~r/\s/, "")
+    cube = Rubik.qturns(socket.assigns.cube, move_sequence)
+    socket = assign(socket, :cube, cube)
+    push(socket, "move_sequence", %{moves: move_sequence})
+    { :noreply, socket }
+  end
+
+  def handle_in("pattern", _params, socket) do
+    #TODO add other patterns using the pattern
+    move_sequence = [
+      "U'", "L'", "U'", "F'", "R2", "B'", "R", "F", "U", "B2", 
+      "U", "B'", "L", "U'", "F", "U", "R", "F'"
+    ]
+    cube = Rubik.qturns(socket.assigns.cube, move_sequence)
+    socket = assign(socket, :cube, cube)
+    push(socket, "move_sequence", %{moves: move_sequence})
+    { :noreply, socket }
+  end 
+
   def handle_in(_, _, socket) do
     push(socket, "error", "No corresponding event")
     { :noreply, socket }
@@ -37,16 +64,3 @@ defmodule VisuWeb.RubikChannel do
 
 end
 
-
-#  def solve_cross(conn, _params) do
-#    solver_data = Rubik.solve_cube(get_session(conn, :cube))
-#    cube = solver_data.cube
-#    conn
-#    |> put_session(:cube, cube)
-#    |> render("rubik.html", cube: cube)
-#
-#  def cube_in_cube_pattern(conn, _params) do
-#    cube = Rubik.qturns(Rubik.new_cube(), [
-#      "U'", "L'", "U'", "F'", "R2", "B'", "R", "F", "U", "B2", 
-#      "U", "B'", "L", "U'", "F", "U", "R", "F'"
-#    ])

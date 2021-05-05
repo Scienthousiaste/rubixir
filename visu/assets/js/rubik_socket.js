@@ -18,6 +18,10 @@ export default class RubikSocket {
 			console.log("Move received: " + msg.move)
 			this.rubik3D.animateMove(msg.move)
 		})
+		this.channel.on("move_sequence", msg => {
+			console.log("Move sequence received: " + msg.moves)
+			this.rubik3D.animateMoveSequence(msg.moves)
+		})
 	}
 
 	setupChannel() {
@@ -43,4 +47,17 @@ export default class RubikSocket {
 	makeMove(move) {
 		this.channel.push("make_move", {move: move})
 	}
+
+	makeMoveSequence(moves) {
+		this.channel.push("move_sequence", {move_sequence: moves})
+	}
+
+	solveCross() {
+		this.channel.push("solve_cross", {})
+	}
+
+	cubeInCubeInCubePattern() {
+		this.channel.push("pattern", {pattern: "cube_in_cube_in_cube"})
+	}
 }
+

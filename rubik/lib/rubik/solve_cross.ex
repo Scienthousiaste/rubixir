@@ -1,4 +1,5 @@
 defmodule Rubik.SolveCross do
+  alias Rubik.Solver.Helpers
   @max_iter_solve_cross 5
   @max_moves_per_bfs_search 4
   
@@ -18,11 +19,11 @@ defmodule Rubik.SolveCross do
     exit(:normal) 
   end
   defp loop_solve_cross(solver_data, iter, false) do
-    solver_data = find_next_cross_goal(solver_data) 
+    sd = find_next_cross_goal(solver_data) 
     |> complete_cross_goal 
 
-    loop_solve_cross(solver_data, iter - 1, 
-      cross_edges_placed?(solver_data.cube, solver_data.base_face)
+    loop_solve_cross(sd, iter - 1, 
+      cross_edges_placed?(sd.cube, sd.base_face)
     )
   end
 
@@ -41,7 +42,7 @@ defmodule Rubik.SolveCross do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
         progress: solver_data.progress ++ [String.to_atom(String.upcase(goal))],
-        moves: solver_data.moves ++ solver_data.moves
+        moves: solver_data.moves ++ move_sequence
     }
   end
 
@@ -56,7 +57,7 @@ defmodule Rubik.SolveCross do
 
   defp cross_goal_state(face) do
     Enum.map(Rubik.Solver.edges(face),
-      fn atom_edge -> String.downcase(Atom.to_string(atom_edge)) end
+      fn atom_edge -> Helpers.cubicle_to_expected_cubie(atom_edge) end
     )
   end
 
