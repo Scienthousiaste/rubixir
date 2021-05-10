@@ -1,7 +1,7 @@
 defmodule Rubik.SolverData do
   defstruct(
     cube:       Rubik.new_cube(),
-    base_face:  :B,
+    base_face:  :D,
     moves:      [],
     progress:   []
   )

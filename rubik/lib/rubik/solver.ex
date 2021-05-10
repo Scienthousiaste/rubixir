@@ -33,31 +33,13 @@ defmodule Rubik.Solver do
     end)
   end
 
-  defp score_base_face(cube, face) do
-    %{ edges: edges, corners: corners } = edges_and_corners(face)
-    5 * cubies_in_place(cube, edges) + cubies_in_place(cube, corners)
-  end
-
-  defp compute_base_face_scores(cube) do
-    Enum.map(faces(),
-        fn face -> { face, score_base_face(cube, face) } end
-    )
-  end
-
-  defp find_cfop_base_face(cube) do
-    compute_base_face_scores(cube)
-    |> Enum.max_by(fn {_, v} -> v end)
-    |> (fn {face, _} -> face end).()
-  end
-
   def solve_cube( cube = %Rubik.State{} ) do
     solve_with(cube, :CFOP) 
   end
 
   def solve_with(cube, :CFOP) do
-    sd = init_cfop_solver_data(cube)
+    init_cfop_solver_data(cube)
     |> Rubik.SolveCross.solve_cross
-    |> Rubik.SolveF2L.solve_f2l
   end
 
   defp compute_cross_progress(cube, base_face) do
@@ -67,7 +49,9 @@ defmodule Rubik.Solver do
   end
 
   def init_cfop_solver_data(cube) do
-    base_face = find_cfop_base_face(cube) 
+    #base_face = find_cfop_base_face(cube) 
+    base_face = :D
+    
     %Rubik.SolverData{
       cube:       cube,
       base_face:  base_face,
