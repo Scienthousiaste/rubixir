@@ -18,7 +18,8 @@ export const CUBIE_MATERIALS = {
 	"D": new MeshBasicMaterial({ color: 0xfbfbfb}),
 	"F": new MeshBasicMaterial({ color: 0x1010cd}),
 	"B": new MeshBasicMaterial({ color: 0x10cd10}),
-	"x": new MeshBasicMaterial({ color: 0x101010}),
+	"x": new MeshBasicMaterial({ color: 0x404040}),
+	"0": new MeshBasicMaterial({ color: 0x101010}),
 }
 
 export const FACE_TO_AXIS = {

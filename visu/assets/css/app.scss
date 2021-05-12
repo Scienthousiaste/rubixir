@@ -32,6 +32,8 @@
 }
 
 
+
+
 .sequence-button-container {
 	border: black 1px dotted;
 }
@@ -44,3 +46,10 @@
 	cursor: pointer;
 }
 
+.cross_solution {
+	display: flex;
+	flex-direction: row;
+	width: 230px;
+	justify-content: space-between;
+	border: black 1px solid; 
+}

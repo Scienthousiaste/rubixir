@@ -28,7 +28,11 @@ export function bindButtonToActions(rubikSocket, rubik3D) {
 	cubeInCubePatternButton.onclick = () => {
 		rubikSocket.cubeInCubeInCubePattern()
 	}
-
+	
+	const superflipPatternButton = document.querySelector("#superflip_pattern")
+	superflipPatternButton.onclick = () => {
+		rubikSocket.superflipPattern()
+	}
 
 	const moveAnimationDurationSlider = document.querySelector("#moveAnimationDuration")
 	moveAnimationDurationSlider.oninput = (e) => {

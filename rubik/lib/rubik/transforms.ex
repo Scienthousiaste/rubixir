@@ -8,18 +8,18 @@ defmodule Rubik.Transforms do
     Enum.zip([List.last(corner_list)] ++ corner_list, corner_list)
   end
 
-  defp rotate_corner(corner, [first, second, third]) do
-    String.at(corner, first)
-      <> String.at(corner, second)
-      <> String.at(corner, third)
-  end
-
   defp corner_transformation(cube, { rotation, {corner_list, direction} } ) do
     corner_tuples = corner_to_corner(corner_list, direction)
     Enum.reduce(corner_tuples, cube,
       fn ({from, to}, acc_cube) -> 
         Map.update!(acc_cube, to,
-          fn _val -> rotate_corner(Map.get(cube, from), rotation) end) 
+          fn _val ->
+            Rubik.Cube.rotate_corner(
+              Map.get(cube, from),
+              rotation
+            )
+          end
+        ) 
       end
     )
   end

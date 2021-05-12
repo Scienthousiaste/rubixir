@@ -1,6 +1,7 @@
 defmodule Rubik do
 
   defdelegate new_cube(),                   to: Rubik.Cube
+  defdelegate cube_test(state),             to: Rubik.Cube
   defdelegate new_cube(sequence),           to: Rubik.Cube
   defdelegate scrambled_cube(),             to: Rubik.Cube
   defdelegate scrambled_cube(number_moves), to: Rubik.Cube

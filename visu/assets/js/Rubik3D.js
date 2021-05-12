@@ -175,8 +175,25 @@ export default class Rubik3D {
 		this.cubies = initCube(this, cube)
 	}
 
+	addToCrossSolutions(move_sequence) {
+		//TODO: remove
+		const elt = document.querySelector("#cross_solves")
+		const newCrossSolution = document.createElement("div")
+		const csText = document.createElement("div")
+		const csNum = document.createElement("div")
+
+		newCrossSolution.setAttribute("class", "cross_solution")
+		csText.textContent = move_sequence.join(" ")
+		console.dir(move_sequence)
+		csNum.textContent = move_sequence.length
+		newCrossSolution.appendChild(csText)
+		newCrossSolution.appendChild(csNum)
+		elt.appendChild(newCrossSolution)
+	}
+
 	isValidSequence(sequence) {
 		//TODO
+		//with regexp
 		return true
 	}
 }

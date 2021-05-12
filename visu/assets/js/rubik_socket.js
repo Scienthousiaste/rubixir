@@ -21,6 +21,9 @@ export default class RubikSocket {
 		this.channel.on("move_sequence", msg => {
 			console.log("Move sequence received: " + msg.moves)
 			this.rubik3D.animateMoveSequence(msg.moves)
+			if (msg.type === "cross") {
+				this.rubik3D.addToCrossSolutions(msg.moves)
+			}
 		})
 	}
 
@@ -58,6 +61,10 @@ export default class RubikSocket {
 
 	cubeInCubeInCubePattern() {
 		this.channel.push("pattern", {pattern: "cube_in_cube_in_cube"})
+	}
+
+	superflipPattern() {
+		this.channel.push("pattern", {pattern: "superflip"})
 	}
 }
 

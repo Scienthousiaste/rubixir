@@ -16,9 +16,34 @@ defmodule VisuWeb.RubikChannel do
   end
 
   def handle_in("get_solved_cube", _params, socket) do
-    cube = Rubik.new_cube()
+
+    #cube = Rubik.new_cube()
+    
+    # Transformation de drf a dlf.
+    # Dans le state
+    #  - r devient f
+    #  - f devient l
+    #  Cubicle : R passe sur F, F passe sur L
+    # Dans l'algo
+    # - R devient F
+    #  Tout se transforme pareil, cool!
+    #
+
+    cross = %{
+      DF: "df",
+      DR: "dr",
+      DL: "dl",
+      DB: "db",
+    }
+
+
+    cube = Rubik.cube_test(cross)
+
     socket = assign(socket, :cube, cube)
-    push(socket, "new_cube", %{cube: Map.from_struct(cube)})
+
+    #push(socket, "new_cube", %{cube: Map.from_struct(cube)})
+    push(socket, "new_cube", %{cube: cube})
+
     { :noreply, socket }
   end
 
@@ -32,25 +57,21 @@ defmodule VisuWeb.RubikChannel do
   def handle_in("solve_cross", _params, socket) do
     %{cube: cube, moves: moves} = Rubik.solve_cube(socket.assigns.cube)
     socket = assign(socket, :cube, cube)
-    push(socket, "move_sequence", %{moves: moves})
+    push(socket, "move_sequence", %{moves: moves, type: "cross"})
     { :noreply, socket }
   end
 
   def handle_in("move_sequence", params, socket) do
     move_sequence = String.split(params["move_sequence"], " ")
-    #move_sequence = String.replace(params["move_sequence"], ~r/\s/, "")
     cube = Rubik.qturns(socket.assigns.cube, move_sequence)
     socket = assign(socket, :cube, cube)
     push(socket, "move_sequence", %{moves: move_sequence})
     { :noreply, socket }
   end
 
-  def handle_in("pattern", _params, socket) do
-    #TODO add other patterns using the pattern
-    move_sequence = [
-      "U'", "L'", "U'", "F'", "R2", "B'", "R", "F", "U", "B2", 
-      "U", "B'", "L", "U'", "F", "U", "R", "F'"
-    ]
+  def handle_in("pattern", _params = %{ "pattern" => pattern }, socket) do
+
+    move_sequence = Channel.Helpers.get_pattern(pattern)
     cube = Rubik.qturns(socket.assigns.cube, move_sequence)
     socket = assign(socket, :cube, cube)
     push(socket, "move_sequence", %{moves: move_sequence})

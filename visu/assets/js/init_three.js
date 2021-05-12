@@ -11,11 +11,13 @@ import {
 const getCubieMaterials = (cubicle, cubie) => {
 	const materials = FACES.map(
 		face => {
-			return (
-				cubicle.includes(face) ?
-		  		CUBIE_MATERIALS[cubie[cubicle.indexOf(face)].toUpperCase()] :
-				CUBIE_MATERIALS["x"]
-			)
+			if (cubicle.includes(face)) {
+				const material = CUBIE_MATERIALS[cubie[cubicle.indexOf(face)].toUpperCase()] 
+				return material ? material : CUBIE_MATERIALS["x"]
+			}
+			else {
+				return CUBIE_MATERIALS["0"]
+			}
 		}
 	)
 	return materials
