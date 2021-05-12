@@ -48,7 +48,7 @@ defmodule RubikSolverTest do
       [:DRF, :RF] => %{ URF: "rdf", UB: "fr" },
       [:DLF, :LF] => %{ ULF: "fld", UR: "lf" },
       [:DLB, :LB] => %{ ULB: "ldb", UF: "bl" },
-      [:DRB, :RB] => %{ URB: "brd", UL: "bl" },
+      [:DRB, :RB] => %{ URB: "brd", UL: "rb" },
     }
     Enum.each(
       initial_state_algo1_expected, 
