@@ -22,9 +22,9 @@ defmodule Rubik.Solver.F2L do
     #exit(:normal)
   end
   defp loop_solve_f2l(solver_data, iter, _f2l_complete = false) do
-    #solver_data = find_next_f2l_goal(solver_data)
     find_next_f2l_goal(solver_data)
-    #|> complete_f2l_goal
+    solver_data = find_next_f2l_goal(solver_data)
+    |> complete_f2l_goal
     loop_solve_f2l(solver_data, iter - 1,
       f2l_completed?(solver_data.cube, solver_data.base_face)
     )
@@ -80,6 +80,10 @@ defmodule Rubik.Solver.F2L do
     face = Atom.to_string(face_atom)
     String.replace(corner, face, "")
     |> String.to_atom
+  end
+
+  def complete_f2l_goal({ solver_data, _goal }) do
+    solver_data
   end
 
 end
