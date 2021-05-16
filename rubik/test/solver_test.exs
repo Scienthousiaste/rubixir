@@ -3,6 +3,7 @@ defmodule RubikSolverTest do
   use ExUnit.Case
 
   alias Rubik.Cube
+  alias Rubik.F2L.Algorithms
 
   test "With CFOP, the cross on the base_face is solved after cross_solve" do
     #Randomised test
@@ -60,4 +61,23 @@ defmodule RubikSolverTest do
     )
   end
 
+  test "F2L algos work - they solve what they claim to solve, and don't touch the cross" do
+    cross = %{
+      DF: "df",
+      DR: "dr",
+      DL: "dl",
+      DB: "db",
+    }
+    cross_g = [:DF, :DR, :DL, :DB]
+    Enum.each(
+      Algorithms.get_f2l_algos(),
+      fn algo ->
+        assert (
+        Cube.cube_test(Map.merge(cross, algo.initial_state))
+        |> Rubik.qturns(algo.moves)
+        |> Rubik.Solver.Helpers.goal_reached?(algo.solving ++ cross_g)
+        )
+      end
+    )
+  end
 end

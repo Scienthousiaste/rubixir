@@ -23,18 +23,25 @@ defmodule Rubik.Solver.F2L do
   end
   defp loop_solve_f2l(solver_data, iter, _f2l_complete = false) do
     #solver_data = find_next_f2l_goal(solver_data)
+    find_next_f2l_goal(solver_data)
     #|> complete_f2l_goal
     loop_solve_f2l(solver_data, iter - 1,
       f2l_completed?(solver_data.cube, solver_data.base_face)
     )
   end
 
-  defp find_next_f2l_goal(solver_data = %{ cube: cube, base_face: face }) do
+  defp is_not_placed?(cube, cubicle) do
+    Map.get(cube, cubicle)
+      != Helpers.cubicle_to_expected_cubie(cubicle)
+  end
+
+  defp find_next_f2l_goal(solver_data = 
+    %{ cube: cube, base_face: face }) do
     goal = Enum.find(
       f2l_cubie_duos(face),
       fn [corner, edge] -> 
-        (Map.get(cube, corner) != Helpers.cubicle_to_expected_cubie(corner))
-        or (Map.get(cube, edge) != Helpers.cubicle_to_expected_cubie(edge))
+        is_not_placed?(cube, corner)
+        or is_not_placed?(cube, edge)
       end
     )
     { solver_data, goal }
@@ -42,7 +49,9 @@ defmodule Rubik.Solver.F2L do
 
   def f2l_goal_state(face) do
     Enum.map(f2l_cubies(face),
-      fn atom_cubicle -> Helpers.cubicle_to_expected_cubie(atom_cubicle) end
+      fn atom_cubicle ->
+        Helpers.cubicle_to_expected_cubie(atom_cubicle)
+      end
     )
   end
 
@@ -57,7 +66,7 @@ defmodule Rubik.Solver.F2L do
   end
 
   def f2l_cubie_duos(face) do
-    Enum.map(Rubik.Cube.corners(face), 
+    Enum.map(Cube.corners(face), 
       fn corner -> [corner, get_edge_up_from_corner(corner, face)] end
     )
   end

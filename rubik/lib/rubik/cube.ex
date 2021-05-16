@@ -65,7 +65,7 @@ defmodule Rubik.Cube do
   end
 
   def cube_test(state) do
-    c_t = Enum.reduce(Map.from_struct(%Rubik.State{}), %{},
+    Enum.reduce(Map.from_struct(%Rubik.State{}), %{},
       fn {cubicle, cubie}, map_test -> Map.put(
         map_test,
         cubicle,
