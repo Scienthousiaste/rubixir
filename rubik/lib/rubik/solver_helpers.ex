@@ -74,9 +74,14 @@ defmodule Rubik.Solver.Helpers do
   def update_solver_data(move_sequence, solver_data, goal) do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
-        progress: solver_data.progress ++ [String.to_atom(String.upcase(goal))],
+        progress: solver_data.progress ++ to_atom_list(goal), 
         moves: solver_data.moves ++ move_sequence
     }
+  end
+
+
+  defp to_atom_list(elem) do
+    [String.to_atom(String.upcase(elem))]
   end
 
 end

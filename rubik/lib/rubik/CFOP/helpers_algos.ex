@@ -114,4 +114,19 @@ defmodule Rubik.Solver.AlgoHelpers do
       end
     )
   end
+
+  def rotate_moves(moves, _goal = [corner, _]) do
+    rotate_map = get_rotate_map(corner)
+    Enum.map(
+      moves,
+      fn move_str -> 
+        String.to_charlist(move_str)
+        |> Enum.map(
+          fn char -> 
+            rotate_char(Map.get(rotate_map, [char]), [char]) end
+          )
+        |> List.to_string
+      end
+    )
+  end
 end

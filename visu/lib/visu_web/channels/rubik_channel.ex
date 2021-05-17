@@ -34,8 +34,8 @@ defmodule VisuWeb.RubikChannel do
       DR: "dr",
       DL: "dl",
       DB: "db",
-      URB: "brd",
-      UL: "rb"
+      UR: "rf",
+      URF: "dfr"
     }
 
 

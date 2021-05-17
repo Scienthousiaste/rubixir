@@ -1,6 +1,7 @@
 defmodule Rubik.Solver.F2L do
 
   alias Rubik.Solver.Helpers
+  alias Rubik.Solver.AlgoHelpers
   alias Rubik.Cube
   @max_iter_solve_f2l 1
   
@@ -82,8 +83,48 @@ defmodule Rubik.Solver.F2L do
     |> String.to_atom
   end
 
-  def complete_f2l_goal({ solver_data, _goal }) do
+  defp initial_state_corresponds?(%{base_face: face, 
+    cube: cube}, goal, initial_state) do
+    Enum.all?(
+      AlgoHelpers.rotate_initial_state(initial_state, goal, face),
+      fn {key, val} ->
+        Map.get(cube, key) == val
+      end
+    )
+  end
+
+  defp rotate_moves_if_found(nil, _goal) do
+    nil
+  end
+  defp rotate_moves_if_found(_algo = %{ moves: moves }, goal) do
+    AlgoHelpers.rotate_moves(moves, goal)
+  end
+
+  defp find_suitable_algorithm(solver_data, goal) do
+    Enum.find(
+      Rubik.F2L.Algorithms.get_f2l_algos(),
+      fn algo ->
+        initial_state_corresponds?(
+          solver_data,
+          goal,
+          algo.initial_state
+        )
+      end
+    )
+    |> rotate_moves_if_found(goal)
+  end
+
+  def apply_algo_if_found(nil, solver_data) do
+    IO.inspect "NO ALGO FOUND!"
     solver_data
+  end
+  def apply_algo_if_found(algo, solver_data) do
+    Helpers.update_solver_data(algo, solver_data) 
+  end
+
+  def complete_f2l_goal( { solver_data, goal }) do
+     find_suitable_algorithm(solver_data, goal)
+     |> apply_algo_if_found(solver_data)
   end
 
 end
