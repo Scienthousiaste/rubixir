@@ -9,6 +9,11 @@ defmodule Rubik.Cube do
      "F", "F2", "F'", "U", "U2", "U'", "D", "D2", "D'"]
   end
 
+  def face_moves(face) do
+    face_str = Atom.to_string(face)
+    [face_str, face_str <> "'", face_str <> "2"]
+  end
+
   def faces(), do: [:D, :F, :L, :B, :R, :U]
 
   def edges(:F), do: [:UF, :RF, :DF, :LF] 
@@ -65,13 +70,14 @@ defmodule Rubik.Cube do
   end
 
   def cube_test(state) do
-    Enum.reduce(Map.from_struct(%Rubik.State{}), %{},
+    map = Enum.reduce(Map.from_struct(%Rubik.State{}), %{},
       fn {cubicle, cubie}, map_test -> Map.put(
         map_test,
         cubicle,
         test_cubie(Map.get(state, cubicle), String.length(cubie)))
       end 
     )
+    struct(%Rubik.State{}, map)
   end
 
   defp valid_sequence?(sequence) do
@@ -105,5 +111,3 @@ defmodule Rubik.Cube do
   end
 
 end
-
-

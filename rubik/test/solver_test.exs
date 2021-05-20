@@ -4,6 +4,7 @@ defmodule RubikSolverTest do
   alias Rubik.Cube
   alias Rubik.F2L.Algorithms
   alias Rubik.Solver.Helpers
+  alias Rubik.Solver.F2L.PlaceGoalDuo
 
   test "With CFOP, the cross on the base_face is solved after cross_solve" do
     #Randomised test
@@ -82,7 +83,7 @@ defmodule RubikSolverTest do
     )
   end
 
-  test "Solve first F2L step" do
+  test "Solve easy F2L algo" do
     basic_insert_1_position = %{
       DF: "df",
       DR: "dr",
@@ -100,10 +101,35 @@ defmodule RubikSolverTest do
       progress: [],      
     }
     
-    result = Rubik.Solver.F2L.complete_f2l_goal({ solver_data, [:DRB, :RB] })
-
+    result = Rubik.Solver.F2L.complete_f2l_goal(
+      { solver_data, [:DRB, :RB] }
+    )
     assert Helpers.goal_reached?(result.cube, goal)
   end
 
+  test "Testing is_corner_in_its_column?" do
+    cube = Rubik.cube_test(%{DRF: "rfd", ULB: "lbd", ULF: "dlf"})
+    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DRF)
+    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DLB)
+    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DLF)
+    assert (not PlaceGoalDuo.is_corner_in_its_column?(cube, :DRB))
+  end
+
+  test "Testing f2l_algo_state?" do
+    cube = Rubik.cube_test(%{
+      URB: "rdb", UF: "rb",
+      ULB: "dbl", RF: "bl",
+      DLF: "dlf", LF: "lf",
+      DRF: "drf", UB: "rf",
+    })
+
+    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DRB, :RB])
+    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DLB, :LB]))
+    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DLF, :LF])
+    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DRF, :RF]))
+
+
+
+  end
 
 end

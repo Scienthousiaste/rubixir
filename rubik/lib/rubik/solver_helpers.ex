@@ -23,7 +23,7 @@ defmodule Rubik.Solver.Helpers do
   end
 
   def find_where_target_is(cube, target) do
-    { target_cubicle, _ } = Enum.find(Map.from_struct(cube),
+    { target_cubicle, _ } = Enum.find(cube,
       fn {_cubicle, content} ->
          is_cubie_permutation?(target, content)
       end
@@ -71,6 +71,16 @@ defmodule Rubik.Solver.Helpers do
   def update_solver_data([], solver_data, _) do
     solver_data 
   end
+
+  #TODO: refacto
+  def update_solver_data(move_sequence, solver_data, [goal1, goal2]) do
+    %{ solver_data |
+        cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
+        progress: solver_data.progress ++ [goal1, goal2], 
+        moves: solver_data.moves ++ move_sequence
+    }
+  end
+
   def update_solver_data(move_sequence, solver_data, goal) do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
@@ -78,7 +88,6 @@ defmodule Rubik.Solver.Helpers do
         moves: solver_data.moves ++ move_sequence
     }
   end
-
 
   defp to_atom_list(elem) do
     [String.to_atom(String.upcase(elem))]

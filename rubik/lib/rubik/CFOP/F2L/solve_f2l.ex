@@ -3,33 +3,8 @@ defmodule Rubik.Solver.F2L do
   alias Rubik.Solver.Helpers
   alias Rubik.Solver.AlgoHelpers
   alias Rubik.Cube
+  alias Rubik.Solver.F2L.PlaceGoalDuo
   @max_iter_solve_f2l 1
-  
-  def solve_f2l( solver_data = %{ cube: cube, base_face: face } ) do
-    loop_solve_f2l(
-      solver_data,
-      @max_iter_solve_f2l,
-      f2l_completed?(cube, face)
-    )
-  end
-
-  defp loop_solve_f2l(solver_data, _, _f2l_complete = true) do
-    IO.puts "solve_f2l is done"
-    solver_data
-  end
-  defp loop_solve_f2l(solver_data, _n_iter = 0, _f2l_complete = false) do
-    IO.puts "Loop solve f2l failed to finish"
-    solver_data
-    #exit(:normal)
-  end
-  defp loop_solve_f2l(solver_data, iter, _f2l_complete = false) do
-    find_next_f2l_goal(solver_data)
-    solver_data = find_next_f2l_goal(solver_data)
-    |> complete_f2l_goal
-    loop_solve_f2l(solver_data, iter - 1,
-      f2l_completed?(solver_data.cube, solver_data.base_face)
-    )
-  end
 
   defp is_not_placed?(cube, cubicle) do
     Map.get(cube, cubicle)
@@ -100,7 +75,7 @@ defmodule Rubik.Solver.F2L do
     AlgoHelpers.rotate_moves(moves, goal)
   end
 
-  defp find_suitable_algorithm(solver_data, goal) do
+  defp find_algorithm(solver_data, goal) do
     Enum.find(
       Rubik.F2L.Algorithms.get_f2l_algos(),
       fn algo ->
@@ -114,17 +89,46 @@ defmodule Rubik.Solver.F2L do
     |> rotate_moves_if_found(goal)
   end
 
-  def apply_algo_if_found(nil, solver_data) do
+  defp apply_algorithm(nil, solver_data, _) do
     IO.inspect "NO ALGO FOUND!"
     solver_data
   end
-  def apply_algo_if_found(algo, solver_data) do
-    Helpers.update_solver_data(algo, solver_data) 
+  defp apply_algorithm(algo, solver_data, goal) do
+    IO.inspect ["ALGO FOUND", algo, goal]
+    Helpers.update_solver_data(algo, solver_data, goal) 
   end
 
   def complete_f2l_goal( { solver_data, goal }) do
-     find_suitable_algorithm(solver_data, goal)
-     |> apply_algo_if_found(solver_data)
+    #REFACTO ? return {solver_data, other}pour avoir juste un joli pipe
+    new_sd = PlaceGoalDuo.place_goal_duo(solver_data, goal)
+    
+    find_algorithm(new_sd, goal)
+    |> apply_algorithm(new_sd, goal)
+  end
+
+  defp loop_solve_f2l(solver_data, _, _f2l_complete = true) do
+    IO.puts "solve_f2l is done"
+    solver_data
+  end
+  defp loop_solve_f2l(solver_data, _n_iter = 0, _f2l_complete = false) do
+    IO.puts "Loop solve f2l failed to finish"
+    solver_data
+  end
+  defp loop_solve_f2l(solver_data_pre, iter, _f2l_complete = false) do
+    solver_data = find_next_f2l_goal(solver_data_pre)
+    |> complete_f2l_goal
+
+    loop_solve_f2l(solver_data, iter - 1,
+      f2l_completed?(solver_data.cube, solver_data.base_face)
+    )
+  end
+
+  def solve_f2l( solver_data = %{ cube: cube, base_face: face } ) do
+    loop_solve_f2l(
+      solver_data,
+      @max_iter_solve_f2l,
+      f2l_completed?(cube, face)
+    )
   end
 
 end
