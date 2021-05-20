@@ -1,8 +1,9 @@
 defmodule Rubik.F2L.Algorithms do
   
   alias Rubik.Algorithm
+  alias Rubik.Solver.AlgoHelpers
 
-  defp make_f2l_algo(initial_state, moves) do
+  def make_f2l_algo(initial_state, moves) do
     %Algorithm{
       step: :F2L,
       initial_state: initial_state,
@@ -62,5 +63,51 @@ defmodule Rubik.F2L.Algorithms do
     ]
   end
 
+  def get_algo_initial_cubicles() do
+    [
+      [:URF, :UB],
+      [:URF, :UL],
+      [:URF, :UF],
+      [:URF, :UR],
+      [:DRF, :UR],
+      [:DRF, :UF],
+      [:URF, :RF],
+      [:DRF, :RF]
+    ]
+  end
+
+  def key_from_state(state) do
+    Enum.reduce(
+      state,
+      "",
+      fn {key, val}, result ->
+       result <> Atom.to_string(key) <> ":" <> val 
+      end
+    )
+  end
+
+  def rotate_f2l_algo(algo, goal, face) do
+    %Rubik.Algorithm{
+      initial_state: AlgoHelpers.rotate_initial_state(algo.initial_state,
+        goal, face),
+      moves: AlgoHelpers.rotate_moves(algo.moves, goal),
+      solving: goal,
+      step: :F2L
+    }
+  end
+
+  def get_f2l_algo_map(goal, face) do
+    Enum.reduce(
+      get_f2l_algos(),
+      %{},
+      fn algo, acc_map -> 
+        rotated_algo = rotate_f2l_algo(algo, goal, face)
+        Map.put(acc_map,
+          key_from_state(rotated_algo.initial_state),
+          rotated_algo
+        )
+      end
+    )
+  end
 
 end

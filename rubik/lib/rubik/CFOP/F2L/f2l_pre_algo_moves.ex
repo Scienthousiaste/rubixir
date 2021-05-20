@@ -43,16 +43,7 @@ defmodule Rubik.PreAlgo do
     end
   end
 
-#  def reach_f2l_pre_algo_state(_, _, [], []) do
-#    IO.inspect "nothing to do in reach f2l_pre_algo"
-    #FAUX: ici, si pas en place yet, tester tous les up
-#    []
-#  end
-
-
-  def find_move_sequences_f2l_if_required(_done = true, _, _, _, _) do
-    []
-  end
+  def find_move_sequences_f2l_if_required(_done = true, _, _, _, _), do: []
   def find_move_sequences_f2l_if_required(_, solver_data = %{base_face: face, cube: cube},
     f2l_goal, corner_move, edge_move) do
     Enum.find(get_f2l_pre_algo_move_sequences(corner_move, edge_move,
@@ -60,7 +51,8 @@ defmodule Rubik.PreAlgo do
       fn move_sequence -> 
         Rubik.Solver.F2L.PlaceGoalDuo.f2l_algo_state?(
           Rubik.Transforms.qturns(solver_data.cube, move_sequence), 
-          f2l_goal
+          f2l_goal,
+          face
         )
       end
     )
@@ -69,7 +61,7 @@ defmodule Rubik.PreAlgo do
   def reach_f2l_pre_algo_state(solver_data = %{base_face: face, cube: cube},
     f2l_goal, corner_move, edge_move) do
     find_move_sequences_f2l_if_required(
-      Rubik.Solver.F2L.PlaceGoalDuo.f2l_algo_state?(cube, f2l_goal),
+      Rubik.Solver.F2L.PlaceGoalDuo.f2l_algo_state?(cube, f2l_goal, face),
       solver_data, f2l_goal, corner_move, edge_move)
   end
 

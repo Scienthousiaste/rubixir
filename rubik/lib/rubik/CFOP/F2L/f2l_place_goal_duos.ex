@@ -70,17 +70,9 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
     )
   end
   
-  def f2l_algo_state?(cube, [corner, edge]) do
-    #TODO: will need face here
-    
-    #si le corner est en permutation directe,
-    # le edge doit etre dans le coin correct (CF TEST)
-    
+  def f2l_algo_state?(cube, [corner, edge], face) do
     #Autre probleme : le edge risque de bouger apres le corner move?
     #- a traiter ailleurs a priori
-    
-    #cleanest: find an algo to use instead of these conditions!
-
 
     is_corner_in_its_column?(cube, corner) 
     and is_edge_in_place_or_top?(cube, edge)

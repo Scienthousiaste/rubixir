@@ -1,13 +1,5 @@
 defmodule Rubik.Solver.AlgoHelpers do
   
-  @doc """
-    - initial_state: the initial state required to use an algorithm,
-      as seen from the URF position
-    - cubies to solve: list of cubies that will be correctly positionned
-      after the algorithm has run
-    - base_face: the base face that is solved
-  """
-  
   @rotate_map %{
     id: %{ 'R' => 'R', 'F' => 'F', 'L' => 'L', 'B' => 'B',
            'r' => 'r', 'f' => 'f', 'l' => 'l', 'b' => 'b' },
@@ -59,13 +51,8 @@ defmodule Rubik.Solver.AlgoHelpers do
   def get_rotate_map(:LB), do: @rotate_map.hturn
   def get_rotate_map(:RB), do: @rotate_map.qrturn
 
-  def rotate_char(nil, init_char) do
-    init_char
-  end
-
-  def rotate_char(new_char, _) do
-    new_char 
-  end
+  def rotate_char(nil, init_char), do: init_char
+  def rotate_char(new_char, _), do: new_char 
 
   def rotate_f2l(to_rotate, _ = :D, corner) do
     rotate_map = get_rotate_map(corner)

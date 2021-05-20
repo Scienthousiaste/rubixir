@@ -28,7 +28,8 @@ defmodule Rubik.Cube do
   def corners(:B), do: [:ULB, :URB, :DRB, :DLB]
   def corners(:R), do: [:URB, :URF, :DRF, :DRB]
   def corners(:U), do: [:ULF, :ULB, :URB, :URF]
-  def corners(:D), do: [:DLF, :DLB, :DRB, :DRF]
+ # def corners(:D), do: [:DLF, :DLB, :DRB, :DRF]
+  def corners(:D), do: [:DRB, :DLF, :DLB, :DRF]
 
   def edges_and_corners(face) do
     %{
