@@ -34,7 +34,7 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
 
   def find_moves_to_put_in_place(corner_cubicle, edge_cubicle,
     solver_data, goal = [corner_goal, edge_goal]) do
-    Rubik.BFS.reach_f2l_pre_algo_state(solver_data, goal,
+    Rubik.PreAlgo.reach_f2l_pre_algo_state(solver_data, goal,
       move_corner_up(solver_data.base_face, corner_cubicle, corner_goal),
       move_edge_up(solver_data.base_face, edge_cubicle, edge_goal)
     )
@@ -56,6 +56,7 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
   end
 
   def is_edge_in_place_or_top?(cube_struct, edge) do
+    #TODO: face
     cube = Map.from_struct(cube_struct)
     Helpers.is_cubie_permutation?(
       edge,
@@ -70,16 +71,20 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
   end
   
   def f2l_algo_state?(cube, [corner, edge]) do
-    #TODO: solve issues here
     #TODO: will need face here
+    
     #si le corner est en permutation directe,
     # le edge doit etre dans le coin correct (CF TEST)
     
     #Autre probleme : le edge risque de bouger apres le corner move?
     #- a traiter ailleurs a priori
+    
+    #cleanest: find an algo to use instead of these conditions!
+
 
     is_corner_in_its_column?(cube, corner) 
     and is_edge_in_place_or_top?(cube, edge)
+
   end
 
   def place_goal_duo(solver_data, goal = [corner, edge]) do

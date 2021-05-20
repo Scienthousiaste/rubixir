@@ -18,33 +18,22 @@ defmodule VisuWeb.RubikChannel do
   def handle_in("get_solved_cube", _params, socket) do
 
     #cube = Rubik.new_cube()
-    
-    # Transformation de drf a dlf.
-    # Dans le state
-    #  - r devient f
-    #  - f devient l
-    #  Cubicle : R passe sur F, F passe sur L
-    # Dans l'algo
-    # - R devient F
-    #  Tout se transforme pareil, cool!
-    #
 
     cross = %{
       DF: "df",
       DR: "dr",
       DL: "dl",
       DB: "db",
-      UR: "rf",
-      URF: "dfr"
+      UR: "rb",
+      ULF: "drb"
     }
-
 
     cube = Rubik.cube_test(cross)
 
     socket = assign(socket, :cube, cube)
 
     #push(socket, "new_cube", %{cube: Map.from_struct(cube)})
-    push(socket, "new_cube", %{cube: cube})
+    push(socket, "new_cube", %{cube: Map.from_struct(cube)})
 
     { :noreply, socket }
   end

@@ -4,7 +4,7 @@ defmodule Rubik.Solver.F2L do
   alias Rubik.Solver.AlgoHelpers
   alias Rubik.Cube
   alias Rubik.Solver.F2L.PlaceGoalDuo
-  @max_iter_solve_f2l 1
+  @max_iter_solve_f2l 4
 
   defp is_not_placed?(cube, cubicle) do
     Map.get(cube, cubicle)
@@ -99,11 +99,10 @@ defmodule Rubik.Solver.F2L do
   end
 
   def complete_f2l_goal( { solver_data, goal }) do
-    #REFACTO ? return {solver_data, other}pour avoir juste un joli pipe
-    new_sd = PlaceGoalDuo.place_goal_duo(solver_data, goal)
-    
-    find_algorithm(new_sd, goal)
-    |> apply_algorithm(new_sd, goal)
+    duo_in_place_solver_data = PlaceGoalDuo.place_goal_duo(solver_data, goal)
+
+    find_algorithm(duo_in_place_solver_data, goal)
+    |> apply_algorithm(duo_in_place_solver_data, goal)
   end
 
   defp loop_solve_f2l(solver_data, _, _f2l_complete = true) do
