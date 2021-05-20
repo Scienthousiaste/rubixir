@@ -33,8 +33,8 @@ defmodule Rubik.F2L.Algorithms do
       make_f2l_algo(%{URF: "frd", RF: "rf"},  ["U'", "R", "U'", "R'", "U'", "R", "U2", "R'"]),
       make_f2l_algo(%{URF: "frd", RF: "fr"},  ["U'", "R", "U", "R'", "U", "F'", "U'", "F"]),
 
-      make_f2l_algo(%{URF: "rdf", UR: "rf"},  ["R", "U'", "R'", "U", "U", "F'", "U'", "F"]),
-      make_f2l_algo(%{URF: "frd", UF: "fr"},  ["F'", "U", "F", "U'", "U'", "R", "U", "R'"]),
+      make_f2l_algo(%{URF: "rdf", UR: "rf"},  ["R", "U'", "R'", "U2", "F'", "U'", "F"]),
+      make_f2l_algo(%{URF: "frd", UF: "fr"},  ["F'", "U", "F", "U2", "R", "U", "R'"]),
       make_f2l_algo(%{URF: "rdf", UB: "rf"},  ["U", "F'", "U2", "F", "U", "F'", "U2", "F"]),
       make_f2l_algo(%{URF: "frd", UL: "fr"},  ["U'", "R", "U2", "R'", "U'", "R", "U2", "R'"]),
       make_f2l_algo(%{URF: "rdf", UL: "rf"},  ["U", "F'", "U'", "F", "U", "F'", "U2", "F"]),
@@ -46,7 +46,7 @@ defmodule Rubik.F2L.Algorithms do
       make_f2l_algo(%{URF: "rdf", UF: "fr"},  ["U", "F'", "U2", "F", "U'", "R", "U", "R'"]),
       make_f2l_algo(%{URF: "frd", UR: "rf"},  ["U'", "R", "U2", "R'", "U", "F'", "U'", "F"]),
 
-      make_f2l_algo(%{URF: "dfr", UF: "fr"},  ["R", "U", "R'", "U'", "U'", "R", "U", "R'", "U'", "R", "U", "R'"]),
+      make_f2l_algo(%{URF: "dfr", UF: "fr"},  ["R", "U", "R'", "U2", "R", "U", "R'", "U'", "R", "U", "R'"]),
       make_f2l_algo(%{URF: "dfr", UR: "rf"},  ["F'", "U'", "F", "U", "U", "F'", "U'", "F", "U", "F'", "U'", "F"]),
       make_f2l_algo(%{URF: "dfr", UL: "fr"},  ["U2", "R", "U", "R'", "U", "R", "U'", "R'"]),
       make_f2l_algo(%{URF: "dfr", UB: "rf"},  ["U2", "F'", "U'", "F", "U'", "F'", "U", "F"]),

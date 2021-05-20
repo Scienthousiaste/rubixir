@@ -4,7 +4,7 @@ defmodule Rubik.Solver.F2L do
   alias Rubik.Solver.AlgoHelpers
   alias Rubik.Cube
   alias Rubik.Solver.F2L.PlaceGoalDuo
-  @max_iter_solve_f2l 1
+  @max_iter_solve_f2l 4
 
   defp is_not_placed?(cube, cubicle) do
     Map.get(cube, cubicle)
@@ -95,10 +95,15 @@ defmodule Rubik.Solver.F2L do
     
     #TODO: CETTE MAP A SUREMENT BESOIN DE FAIRE DU ROTATE_CUBICLE DEDANS
     f2l_algo_map = Rubik.F2L.Algorithms.get_f2l_algo_map(goal, face)
+    IO.inspect ["In find algo. goal, f2l_algo_map", goal, f2l_algo_map]
 
     algo = Enum.find_value(
       initial_conditions_in_cube(solver_data, goal),
       fn algo_conditions ->
+        
+        IO.inspect ["IN fn de find_algo, key_from_state...",
+          Rubik.F2L.Algorithms.key_from_state(algo_conditions)
+        ]
          Map.get(
           f2l_algo_map,
           Rubik.F2L.Algorithms.key_from_state(algo_conditions)
@@ -106,9 +111,10 @@ defmodule Rubik.Solver.F2L do
       end
     )
 
-    IO.puts "LA ALGO"
-    IO.inspect algo
-    rotate_moves_if_found(algo.moves, goal)
+
+    #les moves ont déjà eté modifiés !
+
+    algo.moves
   end
 
   defp apply_algorithm(nil, solver_data, _) do
