@@ -54,6 +54,34 @@ defmodule Rubik.OLL.Algorithms do
       make_oll_algo("LLBFUUFL", ["R'", "F", "R'", "F'", "R2", "U2", "B'", "R", "B", "R'"]),
       make_oll_algo("FBBFUUFL", ["R'", "F", "R", "F'", "U2", "R2", "B'", "R'", "B", "R'"]),
 
+      make_oll_algo("LBUFBRUU", ["R", "U", "R'", "B'", "R", "B", "U'", "B'", "R'", "B"]),
+      make_oll_algo("FUBRBRUU", ["L'", "B'", "L", "U'", "R'", "U", "R", "L'", "B", "L"]),
+      make_oll_algo("FLBUBRUU", ["U2", "L", "R2", "F'", "R", "F'", "R'", "F2", "R", "F'", "R", "L'"]),
+      make_oll_algo("LUURBRUU", ["B'", "R", "B'", "R2", "U", "R", "U", "R'", "U'", "R", "B2"]),
+
+    
+      make_oll_algo("LLBFBUUL", ["L", "U'", "F'", "U2", "F'", "U", "F", "U'", "F", "U2", "F", "U'", "L'"]),
+      make_oll_algo("UBRFBUUL", ["U2", "R'", "L2", "F", "L'", "F", "L", "F2", "L'", "F", "L'", "R"]),
+      make_oll_algo("LUURBUUL", ["R2", "U", "R'", "B'", "R", "U'", "R2", "U", "R", "B", "R'"]),
+      make_oll_algo("LBRUBUUL", ["L'", "B2", "R", "B", "R'", "B", "L"]),
+      make_oll_algo("UURRURUL", ["R", "U", "R", "B'", "R'", "B", "U'", "R'"]),
+      
+      make_oll_algo("ULRUBUFU", ["R", "U", "R'", "U'", "B'", "R'", "F", "R", "F'", "B"]),
+
+
+      make_oll_algo("FLBUBUFU", ["R'", "F", "R", "U", "R'", "F'", "R", "F", "U'", "F'"]),
+      make_oll_algo("UBRFBUFU", ["L", "F'", "L'", "U'", "L", "F", "L'", "F'", "U", "F"]),
+      make_oll_algo("LBRUBUFU", ["L'", "B'", "L", "R'", "U'", "R", "U", "L'", "B", "L"]),
+      make_oll_algo("ULBRBUFU", ["R", "B", "R'", "L", "U", "L'", "U'", "R", "B'", "R'"]),
+
+      make_oll_algo("UURRURFU", ["F", "U", "R", "U'", "R'", "F'"]),
+      make_oll_algo("FBUUUUFL", ["R'", "U'", "F", "U", "R", "U'", "R'", "F'", "R"]),
+      make_oll_algo("UUBFURFU", ["L", "U", "F'", "U'", "L'", "U", "L", "F", "L'"]),
+      make_oll_algo("LLUUUUFL", ["F'", "U'", "L'", "U", "L", "F"]),
+
+
+
+
     ]
   end
 
