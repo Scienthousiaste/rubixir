@@ -92,28 +92,16 @@ defmodule Rubik.Solver.F2L do
   end
 
   def find_algorithm(solver_data = %{ cube: cube, base_face: face }, goal) do
-    
-    #TODO: CETTE MAP A SUREMENT BESOIN DE FAIRE DU ROTATE_CUBICLE DEDANS
     f2l_algo_map = Rubik.F2L.Algorithms.get_f2l_algo_map(goal, face)
-    IO.inspect ["In find algo. goal, f2l_algo_map", goal, f2l_algo_map]
-
     algo = Enum.find_value(
       initial_conditions_in_cube(solver_data, goal),
       fn algo_conditions ->
-        
-        IO.inspect ["IN fn de find_algo, key_from_state...",
-          Rubik.F2L.Algorithms.key_from_state(algo_conditions)
-        ]
          Map.get(
           f2l_algo_map,
           Rubik.F2L.Algorithms.key_from_state(algo_conditions)
         )
       end
     )
-
-
-    #les moves ont déjà eté modifiés !
-
     algo.moves
   end
 

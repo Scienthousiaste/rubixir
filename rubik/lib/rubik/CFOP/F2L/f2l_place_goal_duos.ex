@@ -10,7 +10,7 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
   defp get_move_corner_up(_, :DLB), do: ["B'", "L"]
 
   defp move_corner_up(face = :D, corner_cubicle, corner_goal) do
-    #Valable que pour face :D :/ 
+    #TODO: other faces
     get_move_corner_up(
       Helpers.is_in_opposite_face?(corner_cubicle, face),
       corner_cubicle
@@ -70,18 +70,28 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
     )
   end
   
-  def f2l_algo_state?(cube, [corner, edge], face) do
-    #Autre probleme : le edge risque de bouger apres le corner move?
-    #- a traiter ailleurs a priori
-
-    is_corner_in_its_column?(cube, corner) 
-    and is_edge_in_place_or_top?(cube, edge)
-
+  def f2l_algo_state?(cube, goal = [corner, edge], face) do
+    pseudo_solver_data = %Rubik.SolverData{
+      cube: cube,
+      base_face: face,
+      moves: [],
+      progress: []
+    }
+    
+    f2l_algo_map = Rubik.F2L.Algorithms.get_f2l_algo_map(goal, face)
+    Enum.find(
+      Rubik.Solver.F2L.initial_conditions_in_cube(pseudo_solver_data, goal),
+      fn algo_conditions ->
+        Map.get(
+          f2l_algo_map,
+          Rubik.F2L.Algorithms.key_from_state(algo_conditions)
+        )
+      end
+    ) != nil
   end
 
   def place_goal_duo(solver_data, goal = [corner, edge]) do
     cube = Map.from_struct(solver_data.cube)
-
     find_moves_to_put_in_place(
       Helpers.find_where_target_is(cube, corner),
       Helpers.find_where_target_is(cube, edge),

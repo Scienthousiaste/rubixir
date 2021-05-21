@@ -128,14 +128,14 @@ defmodule RubikF2LTest do
     cube = Rubik.cube_test(%{
       URB: "rdb", UF: "rb",
       ULB: "dbl", RF: "bl",
-      DLF: "dlf", LF: "lf",
+      DLF: "dlf", LF: "fl",
       DRF: "drf", UB: "rf",
     })
 
-    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DRB, :RB])
-    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DLB, :LB]))
-    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DLF, :LF])
-    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DRF, :RF]))
+    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DRB, :RB], :D)
+    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DLB, :LB], :D))
+    assert PlaceGoalDuo.f2l_algo_state?(cube, [:DLF, :LF], :D)
+    assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DRF, :RF], :D))
   end
 
 
