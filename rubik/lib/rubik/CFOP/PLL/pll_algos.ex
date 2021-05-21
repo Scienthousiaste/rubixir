@@ -65,12 +65,6 @@ defmodule Rubik.PLL.Algorithms do
 
       make_pll_algo(%{ULF: "ubl", ULB: "ufl", URF: "ubr", URB: "ufr"},
         ["R", "B'", "R'", "F", "R", "B", "R'", "F2", "L'", "B", "L", "F", "L'", "B'", "L"]),
-
     ]
   end
-
-  def get_pll_algo_map(face = :D) do
-    %{}
-  end
-
 end
