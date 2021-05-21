@@ -4,6 +4,7 @@ defmodule Rubik.Solver.F2L do
   alias Rubik.Solver.AlgoHelpers
   alias Rubik.Cube
   alias Rubik.Solver.F2L.PlaceGoalDuo
+  alias Rubik.F2L.Algorithms
   @max_iter_solve_f2l 4
 
   defp is_not_placed?(cube, cubicle) do
@@ -58,19 +59,12 @@ defmodule Rubik.Solver.F2L do
     |> String.to_atom
   end
 
-  defp rotate_moves_if_found(nil, _goal) do
-    nil
-  end
-  defp rotate_moves_if_found(moves, goal) do
-    AlgoHelpers.rotate_moves(moves, goal)
-  end
-
   def initial_conditions_in_cube(
-    solver_data = %{ cube: cube, base_face: face },
-    goal = [goal_corner, goal_edge]) do
+    %{ cube: cube, base_face: face },
+    [goal_corner, goal_edge]) do
 
     Enum.map(
-      Rubik.F2L.Algorithms.get_algo_initial_cubicles(),
+      Algorithms.get_algo_initial_cubicles(),
       fn [corner, edge] -> 
         
         { rotated_corner, _, _ } =
@@ -91,14 +85,14 @@ defmodule Rubik.Solver.F2L do
     )
   end
 
-  def find_algorithm(solver_data = %{ cube: cube, base_face: face }, goal) do
-    f2l_algo_map = Rubik.F2L.Algorithms.get_f2l_algo_map(goal, face)
+  def find_algorithm(solver_data = %{ base_face: face }, goal) do
+    f2l_algo_map = Algorithms.get_f2l_algo_map(goal, face)
     algo = Enum.find_value(
       initial_conditions_in_cube(solver_data, goal),
       fn algo_conditions ->
          Map.get(
           f2l_algo_map,
-          Rubik.F2L.Algorithms.key_from_state(algo_conditions)
+          Algorithms.key_from_state(algo_conditions)
         )
       end
     )

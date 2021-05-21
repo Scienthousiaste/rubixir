@@ -24,8 +24,8 @@ defmodule VisuWeb.RubikChannel do
       DR: "dr",
       DL: "dl",
       DB: "db",
-      UR: "rb",
-      ULF: "drb"
+      UR: "lf",
+      ULF: "fld"
     }
 
     cube = Rubik.cube_test(cross)

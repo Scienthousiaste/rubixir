@@ -96,19 +96,10 @@ defmodule RubikF2LTest do
     assert Helpers.goal_reached?(result.cube, goal)
   end
 
-  test "Testing is_corner_in_its_column?" do
-    cube = Rubik.cube_test(%{DRF: "rfd", ULB: "lbd", ULF: "dlf"})
-    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DRF)
-    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DLB)
-    assert PlaceGoalDuo.is_corner_in_its_column?(cube, :DLF)
-    assert (not PlaceGoalDuo.is_corner_in_its_column?(cube, :DRB))
-  end
-
-
   test "Test placing goal duo when both cubies are on top" do
     cube_dlf = Rubik.cube_test(%{
       DF: "df", DR: "dr", DL: "dl", DB: "db", 
-      UR: "lf", URF: "lfd"
+      UR: "lf", URF: "fld"
     })
     cube_dlf_placed = Rubik.cube_test(%{
       DF: "df", DR: "dr", DL: "dl", DB: "db", 
@@ -119,8 +110,8 @@ defmodule RubikF2LTest do
       UR: "rb", ULF: "drb"
     })
     
-    assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf_placed, base_face: :D}, [:DLF, :LF], [], []) == []
-    assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf, base_face: :D}, [:DLF, :LF], [], []) == ["U"] 
+    #assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf_placed, base_face: :D}, [:DLF, :LF], [], []) == []
+#    assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf, base_face: :D}, [:DLF, :LF], [], []) == ["U"] 
     assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_drb, base_face: :D}, [:DRB, :RB], [], []) == ["U2"] 
   end
 

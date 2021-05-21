@@ -72,7 +72,6 @@ defmodule Rubik.Solver.Helpers do
     solver_data 
   end
 
-  #TODO: refacto
   def update_solver_data(move_sequence, solver_data, [goal1, goal2]) do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
