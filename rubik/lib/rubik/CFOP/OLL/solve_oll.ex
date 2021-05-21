@@ -3,7 +3,7 @@ defmodule Rubik.Solver.OLL do
 
   defp repeat_string(string, 1), do: string <> string 
   defp repeat_string(string, n), do: repeat_string(string <> string, n - 1)
-  def oll_goal_state(face) do
+  defp oll_goal_state(face) do
     Helpers.opposite_face(face)
     |> Atom.to_string
     |> repeat_string(3)
@@ -55,7 +55,7 @@ defmodule Rubik.Solver.OLL do
     [move] ++ algo.moves
   end
 
-  defp do_find_moves(nil, solver_data = %{ cube: cube, base_face: face },
+  defp do_find_moves(nil, %{ cube: cube, base_face: face },
     oll_algo_map) do
 
     Enum.find_value(
@@ -71,7 +71,7 @@ defmodule Rubik.Solver.OLL do
       end
     )
   end 
-  defp do_find_moves(algo = %Rubik.Algorithm{moves: moves}, _, _) do
+  defp do_find_moves(%Rubik.Algorithm{moves: moves}, _, _) do
     moves 
   end 
   
@@ -91,7 +91,7 @@ defmodule Rubik.Solver.OLL do
     Helpers.update_solver_data(moves, solver_data)
   end
 
-  def solve_oll( solver_data = %{ cube: cube, base_face: face } ) do
+  def solve_oll( solver_data = %{ base_face: face } ) do
     oll_algo_map = Rubik.OLL.Algorithms.get_oll_algo_map(face)
     find_oll_algo(oll_algo_map, solver_data)
     |> apply_oll_algo(solver_data)

@@ -6,8 +6,7 @@ defmodule RubikOLLTest do
 
   defp u_or_x(true), do: 'u'
   defp u_or_x(false), do: 'x'
-
-  def make_dummy_oll_cubie([oll_state_char], cubicle) do
+  defp make_dummy_oll_cubie([oll_state_char], cubicle) do
     Enum.map(
       Atom.to_charlist(cubicle),
       fn char -> u_or_x(char == oll_state_char) end
@@ -15,7 +14,7 @@ defmodule RubikOLLTest do
     |> List.to_string
   end 
 
-  def oll_cubies_from_state(oll_state) do
+  defp oll_cubies_from_state(oll_state) do
     top_cubicles = [:ULF, :ULB, :URB, :URF, :UB, :UR, :UF, :UL]
     
     {result, _} = Enum.reduce(
