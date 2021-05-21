@@ -29,6 +29,15 @@ defmodule Rubik.OLL.Algorithms do
       make_oll_algo("FBRRBUFU", ["F", "U", "R", "U'", "R'", "U", "R", "U'", "R'", "F'"]),
       make_oll_algo("LLRRBUFU", ["L'", "B'", "L", "U'", "R'", "U", "R", "U'", "R'", "U", "R", "L'", "B", "L"]),
 
+      make_oll_algo("FBRRUUUU", ["L", "U'", "R'", "U", "L'", "U", "R", "U", "R'", "U", "R"]),
+      make_oll_algo("LLRRUUUU", ["R", "U", "R'", "U", "R", "U'", "R'", "U", "R", "U2", "R'"]),
+      make_oll_algo("FLBUUUUU", ["L'", "U", "R", "U'", "L", "U", "R'"]),
+      make_oll_algo("LBRUUUUU", ["R'", "U2", "R", "U", "R'", "U", "R"]),
+      make_oll_algo("UUBFUUUU", ["R'", "F'", "L", "F", "R", "F'", "L'", "F"]),
+      make_oll_algo("FUUFUUUU", ["R2", "D", "R'", "U2", "R", "D'", "R'", "U2", "R'"]),
+      make_oll_algo("LUBUUUUU", ["R'", "F'", "L'", "F", "R", "F'", "L", "F"]),
+      make_oll_algo("UUUUBRUU", ["L", "R'", "F'", "L'", "R", "U2", "L", "R'", "F'", "L'", "R"]),
+      make_oll_algo("UUUUBUFU", ["L'", "R", "U", "R'", "U'", "L", "R'", "F", "R", "F'"]),
 
     ]
 
