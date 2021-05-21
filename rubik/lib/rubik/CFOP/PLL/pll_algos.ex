@@ -40,7 +40,31 @@ defmodule Rubik.PLL.Algorithms do
       make_pll_algo(%{ULB: "ubr", URB: "ulf", ULF: "ubl", UB: "ul", UL: "ur", UR: "ub"},
 	    ["R2", "D", "B'", "U", "B'", "U'", "B", "D'", "R2", "F'", "U", "F"]),
 
-      
+      make_pll_algo(%{ULB: "ufl", ULF: "ufr", URF: "ulb", UB: "uf", UF: "ul", UL: "ub"},
+        ["R'", "U'", "R", "B2", "D", "L'", "U", "L", "U'", "L", "D'", "B2"]),
+      make_pll_algo(%{ULB: "ufl", ULF: "ufr", URF: "ulb", UL: "ur", UR: "uf", UF: "ul"},
+	    ["R2", "D'", "F", "U'", "F", "U", "F'", "D", "R2", "B", "U'", "B'"]),
+      make_pll_algo(%{ULB: "ubr", URB: "ulf", ULF: "ubl", UB: "ul", UL: "uf", UF: "ub"},
+        ["R", "U", "R'", "F2", "D'", "L", "U'", "L'", "U", "L'", "D", "F2"]),
+      make_pll_algo(%{UL: "ur", UR: "ul", ULF: "ufr", URF: "ufl"},
+        ["R'", "U2", "R'", "U'", "B'", "R'", "B2", "U'", "B'", "U", "B'", "R", "B", "U'",
+        "R"]),
+
+      make_pll_algo(%{UB: "ul", UL: "ub", UF: "ur", UR: "uf"},
+        ["R2", "L2", "D", "R2", "L2", "U", "R'", "L", "F2", "R2", "L2", "B2", "R'", "L",
+        "U2"]),
+      make_pll_algo(%{ULB: "urf", URF: "ulb", UB: "ul", UL: "ub"},
+        ["F", "R", "U'", "R'", "U'", "R", "U", "R'", "F'", "R", "U", "R'", "U'", "R'",
+        "F", "R", "F'"]),
+      make_pll_algo(%{ULB: "urf", URF: "ulb", UF: "ub", UB: "uf"},
+        ["L", "U'", "R", "U2", "L'", "U", "R'", "L", "U'", "R", "U2", "L'", "U", "R'",
+        "U"]),
+      make_pll_algo(%{ULB: "urf", URF: "ulb", UR: "ul", UL: "ur"},
+        ["R'", "U", "L'", "U2", "R", "U'", "L", "R'", "U", "L'", "U2", "R", "U'", "L",
+        "U"]),
+
+      make_pll_algo(%{ULF: "ubl", ULB: "ufl", URF: "ubr", URB: "ufr"},
+        ["R", "B'", "R'", "F", "R", "B", "R'", "F2", "L'", "B", "L", "F", "L'", "B'", "L"]),
 
     ]
   end
