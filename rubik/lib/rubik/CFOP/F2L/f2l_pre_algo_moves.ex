@@ -8,15 +8,13 @@ defmodule Rubik.PreAlgo do
   end
 
   defp get_f2l_pre_algo_move_sequences([], [], face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
-    |> Cube.face_moves()
+    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
     for a <- opp_face_moves do
       [a]
     end
   end
   defp get_f2l_pre_algo_move_sequences([], edge_move, face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
-    |> Cube.face_moves()
+    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
     short_version = for a <- edge_move,
         b <- opp_face_moves do
         [a, b, canceling_move(a)]
@@ -27,8 +25,7 @@ defmodule Rubik.PreAlgo do
     short_version ++ long_version
   end
   defp get_f2l_pre_algo_move_sequences(corner_move, [], face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
-    |> Cube.face_moves()
+    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
     for a <- corner_move,
         b <- opp_face_moves,
         d <- opp_face_moves do
@@ -36,8 +33,7 @@ defmodule Rubik.PreAlgo do
     end
   end
   defp get_f2l_pre_algo_move_sequences(corner_move, edge_move, face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
-    |> Cube.face_moves()
+    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
     for a <- corner_move,
         b <- opp_face_moves,
         d <- edge_move,

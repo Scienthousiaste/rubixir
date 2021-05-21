@@ -1,9 +1,12 @@
 defmodule Rubik.Solver.OLL do
   alias Rubik.Solver.Helpers
-  
+
+  defp repeat_string(string, 1), do: string <> string 
+  defp repeat_string(string, n), do: repeat_string(string <> string, n - 1)
   def oll_goal_state(face) do
-    #TODO faire avec face
-    "UUUUUUUU"
+    Helpers.opposite_face(face)
+    |> Atom.to_string
+    |> repeat_string(3)
   end
 
   def oll_completed?(cube, face) do
@@ -47,13 +50,51 @@ defmodule Rubik.Solver.OLL do
     )
   end
 
-  def solve_oll( solver_data = %{ cube: cube, base_face: face } ) do
-    IO.puts oll_status(cube, face)
+  defp moves_from_rotation_plus_algo(_, nil), do: nil
+  defp moves_from_rotation_plus_algo(move, algo) do
+    [move] ++ algo.moves
+  end
 
-    oll_algo_map = Rubik.OLL.Algorithms.get_oll_algo_map(face)
-    IO.inspect oll_algo_map
+  defp do_find_moves(nil, solver_data = %{ cube: cube, base_face: face },
+    oll_algo_map) do
 
+    Enum.find_value(
+      Rubik.Solver.Helpers.opposite_face_moves(face),
+      fn move ->
+        moves_from_rotation_plus_algo(
+          move,
+          Map.get(
+            oll_algo_map, 
+            oll_status(Rubik.Transforms.qturn(cube, move), face)
+          )
+        )
+      end
+    )
+  end 
+  defp do_find_moves(algo = %Rubik.Algorithm{moves: moves}, _, _) do
+    moves 
+  end 
+  
+  defp find_oll_algo(oll_algo_map, solver_data = %{ cube: cube, base_face: face } ) do 
+    do_find_moves(
+      Map.get(oll_algo_map, oll_status(cube, face)),
+      solver_data,
+      oll_algo_map
+    )
+  end
+
+  defp apply_oll_algo(nil, solver_data) do
+    IO.puts "Fail to orient last layer"
     solver_data
+  end
+  defp apply_oll_algo(moves, solver_data) do
+    Helpers.update_solver_data(moves, solver_data)
+  end
+
+  def solve_oll( solver_data = %{ cube: cube, base_face: face } ) do
+    oll_algo_map = Rubik.OLL.Algorithms.get_oll_algo_map(face)
+    find_oll_algo(oll_algo_map, solver_data)
+    |> apply_oll_algo(solver_data)
   end
 
 end

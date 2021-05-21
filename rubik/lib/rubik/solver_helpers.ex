@@ -22,6 +22,10 @@ defmodule Rubik.Solver.Helpers do
     }, face)
   end
 
+  def opposite_face_moves(face) do
+    opposite_face(face) |> Rubik.Cube.face_moves
+  end
+
   def find_where_target_is(cube, target) do
     { target_cubicle, _ } = Enum.find(cube,
       fn {_cubicle, content} ->
