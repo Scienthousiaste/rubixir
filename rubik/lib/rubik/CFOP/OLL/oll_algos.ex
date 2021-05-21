@@ -39,8 +39,15 @@ defmodule Rubik.OLL.Algorithms do
       make_oll_algo("UUUUBRUU", ["L", "R'", "F'", "L'", "R", "U2", "L", "R'", "F'", "L'", "R"]),
       make_oll_algo("UUUUBUFU", ["L'", "R", "U", "R'", "U'", "L", "R'", "F", "R", "F'"]),
 
-    ]
 
+      make_oll_algo("UBRFURFU", ["L", "F", "R'", "F", "R", "F2", "L'"]),
+      make_oll_algo("FURUURFU", ["F", "R'", "F'", "R", "U", "R", "U'", "R'"]),
+      make_oll_algo("FLBUURFU", ["R'", "U'", "R", "F", "R'", "F'", "U", "F", "R", "F'"]),
+      make_oll_algo("UBBUURFU", ["U'", "R", "U2", "R'", "U'", "R", "U'", "R2", "F'", "U'", "F", "U", "R"]),
+      make_oll_algo("LLBFURFU", ["F", "R", "U", "R'", "U'", "R", "U", "R'", "U'", "F'"]),
+      make_oll_algo("FBBFURFU", ["L", "F'", "L'", "F", "U2", "L2", "B", "L", "B'", "L"]),
+
+    ]
   end
 
   def get_oll_algo_map(face = :D) do
