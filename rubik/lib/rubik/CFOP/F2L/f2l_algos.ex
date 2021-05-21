@@ -7,7 +7,6 @@ defmodule Rubik.F2L.Algorithms do
     %Algorithm{
       step: :F2L,
       initial_state: initial_state,
-      solving: [:DRF, :RF],
       moves: moves
     }
   end
@@ -91,7 +90,6 @@ defmodule Rubik.F2L.Algorithms do
       initial_state: AlgoHelpers.rotate_initial_state(algo.initial_state,
         goal, face),
       moves: AlgoHelpers.rotate_moves(algo.moves, goal),
-      solving: goal,
       step: :F2L
     }
   end

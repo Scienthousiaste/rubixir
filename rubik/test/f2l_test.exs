@@ -65,8 +65,7 @@ defmodule RubikF2LTest do
         assert (
         Cube.cube_test(Map.merge(cross, algo.initial_state))
         |> Rubik.qturns(algo.moves)
-        |> Helpers.goal_reached?(algo.solving 
-          ++ cross_goal)
+        |> Helpers.goal_reached?([:DRF, :RF] ++ cross_goal)
         )
       end
     )

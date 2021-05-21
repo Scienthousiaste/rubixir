@@ -36,6 +36,10 @@ defmodule Rubik.Cube do
       corners: corners(face)
     }
   end
+  
+  def face_cubicles(face) do
+    corners(face) ++ edges(face) 
+  end
 
   def new_cube do
     %Rubik.State{}
