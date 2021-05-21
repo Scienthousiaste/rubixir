@@ -16,23 +16,8 @@ defmodule VisuWeb.RubikChannel do
   end
 
   def handle_in("get_solved_cube", _params, socket) do
-
-    #cube = Rubik.new_cube()
-
-    cross = %{
-      DF: "df",
-      DR: "dr",
-      DL: "dl",
-      DB: "db",
-      UR: "lf",
-      ULF: "fld"
-    }
-
-    cube = Rubik.cube_test(cross)
-
+    cube = Rubik.new_cube()
     socket = assign(socket, :cube, cube)
-
-    #push(socket, "new_cube", %{cube: Map.from_struct(cube)})
     push(socket, "new_cube", %{cube: Map.from_struct(cube)})
 
     { :noreply, socket }

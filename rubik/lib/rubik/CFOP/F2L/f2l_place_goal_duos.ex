@@ -28,7 +28,7 @@ defmodule Rubik.Solver.F2L.PlaceGoalDuo do
     )
   end
 
-  def find_moves_to_put_in_place(corner_cubicle, edge_cubicle,
+  defp find_moves_to_put_in_place(corner_cubicle, edge_cubicle,
     solver_data, goal) do
     Rubik.PreAlgo.reach_f2l_pre_algo_state(solver_data, goal,
       move_corner_up(solver_data.base_face, corner_cubicle),

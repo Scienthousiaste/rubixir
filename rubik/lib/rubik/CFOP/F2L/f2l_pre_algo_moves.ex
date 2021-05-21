@@ -17,10 +17,14 @@ defmodule Rubik.PreAlgo do
   defp get_f2l_pre_algo_move_sequences([], edge_move, face) do
     opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
     |> Cube.face_moves()
-    for a <- edge_move,
+    short_version = for a <- edge_move,
         b <- opp_face_moves do
         [a, b, canceling_move(a)]
     end 
+    long_version = for short_seq <- short_version do
+      ["U"] ++ short_seq
+    end
+    short_version ++ long_version
   end
   defp get_f2l_pre_algo_move_sequences(corner_move, [], face) do
     opp_face_moves = Rubik.Solver.Helpers.opposite_face(face)
@@ -47,9 +51,8 @@ defmodule Rubik.PreAlgo do
     []
   end
   def find_move_sequences_f2l_if_required(_,
-    solver_data = %{base_face: face, cube: cube},
+    solver_data = %{base_face: face},
     f2l_goal, corner_move, edge_move) do
-
     Enum.find(get_f2l_pre_algo_move_sequences(corner_move, edge_move,
       face),
       fn move_sequence -> 

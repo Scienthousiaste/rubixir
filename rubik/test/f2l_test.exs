@@ -96,25 +96,6 @@ defmodule RubikF2LTest do
     assert Helpers.goal_reached?(result.cube, goal)
   end
 
-  test "Test placing goal duo when both cubies are on top" do
-    cube_dlf = Rubik.cube_test(%{
-      DF: "df", DR: "dr", DL: "dl", DB: "db", 
-      UR: "lf", URF: "fld"
-    })
-    cube_dlf_placed = Rubik.cube_test(%{
-      DF: "df", DR: "dr", DL: "dl", DB: "db", 
-      UR: "lf", ULF: "lfd"
-    })
-    cube_drb = Rubik.cube_test(%{
-      DF: "df", DR: "dr", DL: "dl", DB: "db", 
-      UR: "rb", ULF: "drb"
-    })
-    
-    #assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf_placed, base_face: :D}, [:DLF, :LF], [], []) == []
-#    assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_dlf, base_face: :D}, [:DLF, :LF], [], []) == ["U"] 
-    assert Rubik.PreAlgo.reach_f2l_pre_algo_state(%{cube: cube_drb, base_face: :D}, [:DRB, :RB], [], []) == ["U2"] 
-  end
-
   test "Testing f2l_algo_state?" do
     cube = Rubik.cube_test(%{
       URB: "rdb", UF: "rb",
@@ -129,5 +110,37 @@ defmodule RubikF2LTest do
     assert (not PlaceGoalDuo.f2l_algo_state?(cube, [:DRF, :RF], :D))
   end
 
+  test "A problematic situation from my initial implementation of edge_move" do
+    solver_data_cross =
+      %Rubik.SolverData{
+        base_face: :D,
+        cube: %Rubik.State{
+          DB: "db",
+          DF: "df",
+          DL: "dl",
+          DLB: "ufr",
+          DLF: "bru",
+          DR: "dr",
+          DRB: "frd",
+          DRF: "blu",
+          LB: "ru",
+          LF: "rf",
+          RB: "lf",
+          RF: "lu",
+          UB: "bu",
+          UF: "fu",
+          UL: "bl",
+          ULB: "luf",
+          ULF: "dfl",
+          UR: "br",
+          URB: "dlb",
+          URF: "drb"
+        },
+        moves: ["R", "F", "L", "B2", "R", "L2"],
+        progress: [:DF, :DR, :DL, :DB]
+    }
+    after_f2l = Rubik.Solver.F2L.solve_f2l(solver_data_cross)
+    assert Rubik.Solver.F2L.f2l_completed?(after_f2l.cube, :D)
+  end
 
 end

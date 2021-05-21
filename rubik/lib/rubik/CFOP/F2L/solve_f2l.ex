@@ -38,7 +38,7 @@ defmodule Rubik.Solver.F2L do
     ) 
   end
 
-  defp f2l_completed?(cube, face) do
+  def f2l_completed?(cube, face) do
     current_f2l_state(cube, face) == f2l_goal_state(face)
   end
 
@@ -85,6 +85,13 @@ defmodule Rubik.Solver.F2L do
     )
   end
 
+
+  defp return_algo_moves_or_nil(nil) do
+    nil
+  end
+  defp return_algo_moves_or_nil(algo) do
+    algo.moves
+  end
   def find_algorithm(solver_data = %{ base_face: face }, goal) do
     f2l_algo_map = Algorithms.get_f2l_algo_map(goal, face)
     algo = Enum.find_value(
@@ -96,7 +103,7 @@ defmodule Rubik.Solver.F2L do
         )
       end
     )
-    algo.moves
+    return_algo_moves_or_nil(algo)
   end
 
   defp apply_algorithm(nil, solver_data, _) do
@@ -104,7 +111,6 @@ defmodule Rubik.Solver.F2L do
     solver_data
   end
   defp apply_algorithm(algo, solver_data, goal) do
-    IO.inspect ["ALGO FOUND", algo, goal]
     Helpers.update_solver_data(algo, solver_data, goal) 
   end
 

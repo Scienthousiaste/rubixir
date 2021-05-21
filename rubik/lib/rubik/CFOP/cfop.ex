@@ -23,10 +23,16 @@ defmodule Rubik.Solver.CFOP do
   end
 
   def solve(cube) do
-    init_cfop_solver_data(cube)
+    IO.inspect ["Will solve cube", cube]
+    
+    
+    cc = init_cfop_solver_data(cube)
     |> Rubik.Solver.Cross.solve_cross
-    |> Rubik.Solver.F2L.solve_f2l
-#   |> Rubik.Solver.OLL.solve_oll
+
+    IO.inspect ["With cross solved", cc]
+
+    Rubik.Solver.F2L.solve_f2l(cc)
+#    |> Rubik.Solver.OLL.solve_oll
 #   |> Rubik.Solver.PLL.solve_pll
   end
 
