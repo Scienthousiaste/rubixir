@@ -14,9 +14,10 @@ defmodule Rubik.Solver.Cross do
   defp loop_solve_cross(solver_data, _, _cross_edges_placed = true) do
     solver_data
   end
-  defp loop_solve_cross(_, _n_iter = 0, _cross_edges_placed = false) do
+  defp loop_solve_cross(solver_data, _n_iter = 0, _cross_edges_placed = false) do
     IO.puts "Loop solve cross failed to finish"
-    exit(:normal) 
+    IO.inspect solver_data
+    solver_data
   end
   defp loop_solve_cross(solver_data, iter, false) do
     sd = find_next_cross_goal(solver_data) 

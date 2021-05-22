@@ -11,6 +11,24 @@ defmodule Rubik.Solver.AlgoHelpers do
                'r' => 'b', 'f' => 'r', 'l' => 'f', 'b' => 'l' },
   }
 
+  def get_rotations(), do: [:id, :qturn, :hturn, :qrturn]
+
+  def get_rotate_map(:DRF),     do: @rotate_map.id 
+  def get_rotate_map(:DLF),     do: @rotate_map.qturn 
+  def get_rotate_map(:DLB),     do: @rotate_map.hturn
+  def get_rotate_map(:DRB),     do: @rotate_map.qrturn
+  def get_rotate_map(:RF),      do: @rotate_map.id 
+  def get_rotate_map(:LF),      do: @rotate_map.qturn 
+  def get_rotate_map(:LB),      do: @rotate_map.hturn
+  def get_rotate_map(:RB),      do: @rotate_map.qrturn
+  def get_rotate_map(:qturn),   do: @rotate_map.qturn  
+  def get_rotate_map(:qrturn),  do: @rotate_map.qrturn
+  def get_rotate_map(:hturn),   do: @rotate_map.hturn
+  def get_rotate_map(:id),      do: @rotate_map.id
+
+  def rotate_char(nil, char),   do: char
+  def rotate_char(new_char, _), do: new_char 
+
   def get_ordering_facelet('U'), do: 0
   def get_ordering_facelet('D'), do: 0
   def get_ordering_facelet('R'), do: 1
@@ -42,24 +60,6 @@ defmodule Rubik.Solver.AlgoHelpers do
     }
   end
   
-  def get_rotations(), do: [:id, :qturn, :hturn, :qrturn]
-
-  def get_rotate_map(:DRF), do: @rotate_map.id 
-  def get_rotate_map(:DLF), do: @rotate_map.qturn 
-  def get_rotate_map(:DLB), do: @rotate_map.hturn
-  def get_rotate_map(:DRB), do: @rotate_map.qrturn
-  def get_rotate_map(:RF), do: @rotate_map.id 
-  def get_rotate_map(:LF), do: @rotate_map.qturn 
-  def get_rotate_map(:LB), do: @rotate_map.hturn
-  def get_rotate_map(:RB), do: @rotate_map.qrturn
-  def get_rotate_map(:qturn), do: @rotate_map.qturn  
-  def get_rotate_map(:qrturn), do: @rotate_map.qrturn
-  def get_rotate_map(:hturn), do: @rotate_map.hturn
-  def get_rotate_map(:id), do: @rotate_map.id
-
-  def rotate_char(nil, init_char), do: init_char
-  def rotate_char(new_char, _), do: new_char 
-
   def rotate_cubicle(to_rotate, rotate_map) do
     { rotated_char_list, new_order } =
       String.to_charlist(to_rotate)
@@ -68,18 +68,12 @@ defmodule Rubik.Solver.AlgoHelpers do
           rotate_char(Map.get(rotate_map, [char]), [char]) end
         )
       |> reorder_cubicle
-    { rotated_char_list, new_order, rotate_map }
+    { String.to_atom(rotated_char_list), new_order, rotate_map }
   end
 
-  def rotate_f2l(to_rotate, _ = :D, corner) do
-    rotate_cubicle(to_rotate, get_rotate_map(corner))
-  end
-
-  def rotate_f2l_cubicle(to_rotate, base_face, corner) do
-    { rotated, new_order, rotate_map } =
-      Atom.to_string(to_rotate)
-      |> rotate_f2l(base_face, corner)
-    { String.to_atom(rotated), new_order, rotate_map }
+  def rotate_f2l_cubicle(to_rotate, corner) do
+    Atom.to_string(to_rotate)
+    |> rotate_cubicle(get_rotate_map(corner))
   end
 
   def rotate_f2l_cubie(to_rotate, rotation, rotate_map) do
@@ -95,11 +89,11 @@ defmodule Rubik.Solver.AlgoHelpers do
       )
   end
 
-  def rotate_initial_state_f2l(initial_state, [corner, _], face) do
+  def rotate_initial_state_f2l(initial_state, [corner, _], _face) do
     Enum.reduce(initial_state, %{},
       fn ({cubicle, cubie}, result_map) ->
         { new_cubicle, rotation, rotate_map } = 
-          rotate_f2l_cubicle(cubicle, face, corner)
+        rotate_f2l_cubicle(cubicle, corner)
 
         Map.put(
           result_map, 
@@ -124,18 +118,4 @@ defmodule Rubik.Solver.AlgoHelpers do
     )
   end
 
-  def rotate_initial_state_pll(initial_state, rotate_map) do
-    Enum.reduce(initial_state, %{},
-      fn ({cubicle, cubie}, result_map) ->
-        { new_cubicle, rotation, rotate_map } = 
-          rotate_cubicle(Atom.to_string(cubicle), rotate_map)
-
-        Map.put(
-          result_map, 
-          new_cubicle, 
-          rotate_f2l_cubie(cubie, rotation, rotate_map)
-        )
-      end
-    )
-  end
 end

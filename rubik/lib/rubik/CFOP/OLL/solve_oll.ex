@@ -75,7 +75,8 @@ defmodule Rubik.Solver.OLL do
     moves 
   end 
   
-  defp find_oll_algo(oll_algo_map, solver_data = %{ cube: cube, base_face: face } ) do 
+  defp find_oll_algo(oll_algo_map, 
+    solver_data = %{ cube: cube, base_face: face } ) do 
     do_find_moves(
       Map.get(oll_algo_map, oll_status(cube, face)),
       solver_data,
@@ -84,7 +85,6 @@ defmodule Rubik.Solver.OLL do
   end
 
   defp apply_oll_algo(nil, solver_data) do
-    IO.puts "Fail to orient last layer"
     solver_data
   end
   defp apply_oll_algo(moves, solver_data) do

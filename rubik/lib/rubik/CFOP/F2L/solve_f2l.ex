@@ -60,7 +60,7 @@ defmodule Rubik.Solver.F2L do
   end
 
   def initial_conditions_in_cube(
-    %{ cube: cube, base_face: face },
+    %{ cube: cube },
     [goal_corner, goal_edge]) do
 
     Enum.map(
@@ -68,14 +68,14 @@ defmodule Rubik.Solver.F2L do
       fn [corner, edge] -> 
         
         { rotated_corner, _, _ } =
-          AlgoHelpers.rotate_f2l_cubicle(corner, face, goal_corner)
+          AlgoHelpers.rotate_f2l_cubicle(corner, goal_corner)
         map_with_corner = Map.put(%{},
           rotated_corner,
           Map.get(cube, rotated_corner)
         )
         
         { rotated_edge, _, _ } =
-          AlgoHelpers.rotate_f2l_cubicle(edge, face, goal_edge)
+          AlgoHelpers.rotate_f2l_cubicle(edge, goal_edge)
         Map.put(
           map_with_corner,
           rotated_edge,
@@ -84,7 +84,6 @@ defmodule Rubik.Solver.F2L do
       end
     )
   end
-
 
   defp return_algo_moves_or_nil(nil) do
     nil
@@ -107,7 +106,6 @@ defmodule Rubik.Solver.F2L do
   end
 
   defp apply_algorithm(nil, solver_data, _) do
-    IO.inspect "NO ALGO FOUND!"
     solver_data
   end
   defp apply_algorithm(algo, solver_data, goal) do
@@ -122,7 +120,6 @@ defmodule Rubik.Solver.F2L do
   end
 
   defp loop_solve_f2l(solver_data, _, _f2l_complete = true) do
-    IO.puts "solve_f2l is done"
     solver_data
   end
   defp loop_solve_f2l(solver_data, _n_iter = 0, _f2l_complete = false) do

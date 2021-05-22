@@ -1,5 +1,6 @@
 defmodule Rubik.PreAlgo do
   alias Rubik.Cube
+  alias Rubik.Solver.Helpers
 
   defp get_cancel_move(move, 2), do: String.at(move, 0)
   defp get_cancel_move(move, 1), do: move <> "'"
@@ -8,24 +9,24 @@ defmodule Rubik.PreAlgo do
   end
 
   defp get_f2l_pre_algo_move_sequences([], [], face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
+    opp_face_moves = Helpers.opposite_face_moves(face)
     for a <- opp_face_moves do
       [a]
     end
   end
   defp get_f2l_pre_algo_move_sequences([], edge_move, face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
+    opp_face_moves = Helpers.opposite_face_moves(face)
     short_version = for a <- edge_move,
         b <- opp_face_moves do
         [a, b, canceling_move(a)]
     end 
     long_version = for short_seq <- short_version do
-      ["U"] ++ short_seq
+      [Atom.to_string(Helpers.opposite_face(face))] ++ short_seq
     end
     short_version ++ long_version
   end
   defp get_f2l_pre_algo_move_sequences(corner_move, [], face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
+    opp_face_moves = Helpers.opposite_face_moves(face)
     for a <- corner_move,
         b <- opp_face_moves,
         d <- opp_face_moves do
@@ -33,7 +34,7 @@ defmodule Rubik.PreAlgo do
     end
   end
   defp get_f2l_pre_algo_move_sequences(corner_move, edge_move, face) do
-    opp_face_moves = Rubik.Solver.Helpers.opposite_face_moves(face)
+    opp_face_moves = Helpers.opposite_face_moves(face)
     for a <- corner_move,
         b <- opp_face_moves,
         d <- edge_move,

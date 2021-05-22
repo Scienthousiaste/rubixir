@@ -1,25 +1,24 @@
 defmodule Rubik.Solver.F2L.PlaceGoalDuo do
   alias Rubik.Solver.Helpers
 
-  defp get_move_corner_up(_in_opposite = true, _), do: []
-  defp get_move_corner_up(_, :DLF), do: ["L'", "F"]
-  defp get_move_corner_up(_, :DRF), do: ["R", "F'"]
-  defp get_move_corner_up(_, :DRB), do: ["R'", "B"]
-  defp get_move_corner_up(_, :DLB), do: ["B'", "L"]
+  defp get_move_corner_up(_opposite = true, _), do: []
+  defp get_move_corner_up(_, :DLF),             do: ["L'", "F"]
+  defp get_move_corner_up(_, :DRF),             do: ["R", "F'"]
+  defp get_move_corner_up(_, :DRB),             do: ["R'", "B"]
+  defp get_move_corner_up(_, :DLB),             do: ["B'", "L"]
 
   defp move_corner_up(face = :D, corner_cubicle) do
-    #TODO: other faces
     get_move_corner_up(
       Helpers.is_in_opposite_face?(corner_cubicle, face),
       corner_cubicle
     )
   end
 
-  defp get_move_edge_up(_in_opposite = true, _), do: []
-  defp get_move_edge_up(_, :LF), do: ["L'", "F"]
-  defp get_move_edge_up(_, :RF), do: ["R", "F'"]
-  defp get_move_edge_up(_, :RB), do: ["R'", "B"]
-  defp get_move_edge_up(_, :LB), do: ["B'", "L"]
+  defp get_move_edge_up(_opposite = true, _), do: []
+  defp get_move_edge_up(_, :LF),              do: ["L'", "F"]
+  defp get_move_edge_up(_, :RF),              do: ["R", "F'"]
+  defp get_move_edge_up(_, :RB),              do: ["R'", "B"]
+  defp get_move_edge_up(_, :LB),              do: ["B'", "L"]
 
   defp move_edge_up(face = :D, edge_cubicle) do
     get_move_edge_up(
