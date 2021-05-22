@@ -13,12 +13,11 @@ defmodule Rubik.Solver.CFOP do
   end
 
   def init_cfop_solver_data(cube) do
-    base_face = :D
     %Rubik.SolverData{
       cube:       cube,
-      base_face:  base_face,
+      base_face:  :D,
       moves:      [],
-      progress:   compute_cross_progress(cube, base_face)
+      progress:   compute_cross_progress(cube, :D)
     }
   end
 

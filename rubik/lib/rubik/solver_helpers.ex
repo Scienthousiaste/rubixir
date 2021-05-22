@@ -63,11 +63,6 @@ defmodule Rubik.Solver.Helpers do
     )
   end
 
-
-  def update_solver_data(nil, solver_data) do
-    IO.inspect ["In update_solver data, received nil!", solver_data]
-    solver_data
-  end
   def update_solver_data([], solver_data) do
     solver_data 
   end
@@ -80,7 +75,6 @@ defmodule Rubik.Solver.Helpers do
   def update_solver_data([], solver_data, _) do
     solver_data 
   end
-
   def update_solver_data(move_sequence, solver_data, [goal1, goal2]) do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
@@ -88,7 +82,6 @@ defmodule Rubik.Solver.Helpers do
         moves: solver_data.moves ++ move_sequence
     }
   end
-
   def update_solver_data(move_sequence, solver_data, goal) do
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
