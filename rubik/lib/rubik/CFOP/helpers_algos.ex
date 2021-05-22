@@ -42,6 +42,8 @@ defmodule Rubik.Solver.AlgoHelpers do
     }
   end
   
+  def get_rotations(), do: [:id, :qturn, :hturn, :qrturn]
+
   def get_rotate_map(:DRF), do: @rotate_map.id 
   def get_rotate_map(:DLF), do: @rotate_map.qturn 
   def get_rotate_map(:DLB), do: @rotate_map.hturn
@@ -50,13 +52,15 @@ defmodule Rubik.Solver.AlgoHelpers do
   def get_rotate_map(:LF), do: @rotate_map.qturn 
   def get_rotate_map(:LB), do: @rotate_map.hturn
   def get_rotate_map(:RB), do: @rotate_map.qrturn
+  def get_rotate_map(:qturn), do: @rotate_map.qturn  
+  def get_rotate_map(:qrturn), do: @rotate_map.qrturn
+  def get_rotate_map(:hturn), do: @rotate_map.hturn
+  def get_rotate_map(:id), do: @rotate_map.id
 
   def rotate_char(nil, init_char), do: init_char
   def rotate_char(new_char, _), do: new_char 
 
-  def rotate_f2l(to_rotate, _ = :D, corner) do
-    rotate_map = get_rotate_map(corner)
-    
+  def rotate_cubicle(to_rotate, rotate_map) do
     { rotated_char_list, new_order } =
       String.to_charlist(to_rotate)
       |> Enum.map(
@@ -65,6 +69,10 @@ defmodule Rubik.Solver.AlgoHelpers do
         )
       |> reorder_cubicle
     { rotated_char_list, new_order, rotate_map }
+  end
+
+  def rotate_f2l(to_rotate, _ = :D, corner) do
+    rotate_cubicle(to_rotate, get_rotate_map(corner))
   end
 
   def rotate_f2l_cubicle(to_rotate, base_face, corner) do
@@ -87,7 +95,7 @@ defmodule Rubik.Solver.AlgoHelpers do
       )
   end
 
-  def rotate_initial_state(initial_state, [corner, _], face) do
+  def rotate_initial_state_f2l(initial_state, [corner, _], face) do
     Enum.reduce(initial_state, %{},
       fn ({cubicle, cubie}, result_map) ->
         { new_cubicle, rotation, rotate_map } = 
@@ -102,8 +110,7 @@ defmodule Rubik.Solver.AlgoHelpers do
     )
   end
 
-  def rotate_moves(moves, _goal = [corner, _]) do
-    rotate_map = get_rotate_map(corner)
+  def rotate_moves(moves, rotate_map) do
     Enum.map(
       moves,
       fn move_str -> 
@@ -113,6 +120,21 @@ defmodule Rubik.Solver.AlgoHelpers do
             rotate_char(Map.get(rotate_map, [char]), [char]) end
           )
         |> List.to_string
+      end
+    )
+  end
+
+  def rotate_initial_state_pll(initial_state, rotate_map) do
+    Enum.reduce(initial_state, %{},
+      fn ({cubicle, cubie}, result_map) ->
+        { new_cubicle, rotation, rotate_map } = 
+          rotate_cubicle(Atom.to_string(cubicle), rotate_map)
+
+        Map.put(
+          result_map, 
+          new_cubicle, 
+          rotate_f2l_cubie(cubie, rotation, rotate_map)
+        )
       end
     )
   end

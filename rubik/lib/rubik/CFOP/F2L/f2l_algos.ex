@@ -85,11 +85,13 @@ defmodule Rubik.F2L.Algorithms do
     )
   end
 
-  def rotate_f2l_algo(algo, goal, face) do
+  def rotate_f2l_algo(algo, goal = [corner, _edge], face) do
     %Rubik.Algorithm{
-      initial_state: AlgoHelpers.rotate_initial_state(algo.initial_state,
+      initial_state: AlgoHelpers.rotate_initial_state_f2l(
+        algo.initial_state,
         goal, face),
-      moves: AlgoHelpers.rotate_moves(algo.moves, goal),
+      moves:  AlgoHelpers.rotate_moves(algo.moves,
+              AlgoHelpers.get_rotate_map(corner)),
       step: :F2L
     }
   end

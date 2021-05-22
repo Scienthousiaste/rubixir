@@ -44,7 +44,7 @@ defmodule RubikF2LTest do
     Enum.each(
       initial_state_algo1_expected, 
       fn {cubie_duo_to_solve, expected_initial_state} -> 
-        assert Rubik.Solver.AlgoHelpers.rotate_initial_state(
+        assert Rubik.Solver.AlgoHelpers.rotate_initial_state_f2l(
           algo1_initial_state, cubie_duo_to_solve, :D
         ) == expected_initial_state
       end 

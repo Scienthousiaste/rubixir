@@ -1,14 +1,7 @@
 defmodule RubikPLLTest do
   use ExUnit.Case
-
   alias Rubik.Cube
-  alias Rubik.Solver.Helpers
   
-  def pll_top_cubies_from_state(initial_state) do
-     
-  end
-
-
   test "PLL algos finish solving the cube" do
     Enum.each(
       Rubik.PLL.Algorithms.get_pll_algos(),
