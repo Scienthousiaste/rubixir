@@ -58,20 +58,27 @@ defmodule Rubik.Solver.CFOP do
   defp iter_over_moves([move | []], new_list), do: new_list ++ [move]
   defp iter_over_moves([], new_list), do: new_list
   
-  defp cull_extra_moves(solver_data = %{moves: moves}) do
-    IO.puts "Start cull with #{Enum.count moves} moves"
+  defp cull_redundant_moves(solver_data = %{moves: moves}) do
     new_moves = iter_over_moves(moves, [])
-    IO.puts "End cull with #{Enum.count new_moves} moves"
     %Rubik.SolverData { solver_data | moves: new_moves }
+  end
+
+  defp describe_state(solver_data = %{moves: moves}, name_step) do
+    IO.puts "After step #{name_step}, #{Enum.count moves} moves"
+    solver_data
   end
 
   def solve(cube) do
     init_cfop_solver_data(cube)
     |> Rubik.Solver.Cross.solve_cross
+    |> describe_state("Cross")
     |> Rubik.Solver.F2L.solve_f2l
+    |> describe_state("F2L")
     |> Rubik.Solver.OLL.solve_oll
+    |> describe_state("OLL")
     |> Rubik.Solver.PLL.solve_pll
-    |> cull_extra_moves
+    |> describe_state("PLL")
+    |> cull_redundant_moves
   end
 
 end

@@ -13,16 +13,40 @@ defmodule Rubik.Solver.PLL do
     end
   end
 
-  defp make_move_combinations(algos) do
-    moves_opposite_face = [] ++ Helpers.opposite_face_moves(:D)
-    algo_moves_sequences = [] ++ get_all_algo_moves(algos)
+  defp moves_opposite_face() do
+    Helpers.opposite_face_moves(:D)
+  end
 
-    for a <- moves_opposite_face,
+  defp only_opposite_face_move() do
+    for a <- moves_opposite_face() do
+      [a]
+    end
+  end
+
+  defp one_algo_sequences(algos) do
+    algo_moves_sequences = get_all_algo_moves(algos)
+    for a <- moves_opposite_face(),
+        b <- algo_moves_sequences do
+        [a] ++ b
+    end
+  end
+
+  defp two_algo_sequences(algos) do
+    algo_moves_sequences = get_all_algo_moves(algos)
+    for a <- moves_opposite_face(),
         b <- algo_moves_sequences,
-        c <- moves_opposite_face,
+        c <- moves_opposite_face(),
         d <- algo_moves_sequences do
         [a] ++ b ++ [c] ++ d
     end
+  end
+
+  defp make_move_combinations(algos) do
+    [[]]
+    ++ only_opposite_face_move()
+    ++ get_all_algo_moves(algos)
+    ++ one_algo_sequences(algos)
+    ++ two_algo_sequences(algos)
   end
 
   def find_pll_solution(%{cube: cube}, algos) do
