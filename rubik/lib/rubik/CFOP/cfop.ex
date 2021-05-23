@@ -58,9 +58,20 @@ defmodule Rubik.Solver.CFOP do
   defp iter_over_moves([move | []], new_list), do: new_list ++ [move]
   defp iter_over_moves([], new_list), do: new_list
   
+
+  defp rec_cull_redundant_moves(_changes = true, solver_data) do
+    cull_redundant_moves(solver_data)
+  end
+  defp rec_cull_redundant_moves(_changes = false, solver_data) do
+    solver_data
+  end
+
   defp cull_redundant_moves(solver_data = %{moves: moves}) do
     new_moves = iter_over_moves(moves, [])
-    %Rubik.SolverData { solver_data | moves: new_moves }
+    rec_cull_redundant_moves(
+      Enum.count(new_moves) < Enum.count(moves),
+      %Rubik.SolverData { solver_data | moves: new_moves }
+    )
   end
 
   defp describe_state(solver_data = %{moves: moves}, name_step) do
