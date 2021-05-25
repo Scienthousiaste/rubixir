@@ -21,6 +21,12 @@ defmodule Rubik.Solver.AlgoHelpers do
   def get_rotate_map(:LF),      do: @rotate_map.qturn 
   def get_rotate_map(:LB),      do: @rotate_map.hturn
   def get_rotate_map(:RB),      do: @rotate_map.qrturn
+  
+  def get_rotate_map(:DL),      do: @rotate_map.id
+  def get_rotate_map(:DF),      do: @rotate_map.qturn
+  def get_rotate_map(:DR),      do: @rotate_map.hturn
+  def get_rotate_map(:DB),      do: @rotate_map.qrturn
+
   def get_rotate_map(:qturn),   do: @rotate_map.qturn  
   def get_rotate_map(:qrturn),  do: @rotate_map.qrturn
   def get_rotate_map(:hturn),   do: @rotate_map.hturn
@@ -76,7 +82,7 @@ defmodule Rubik.Solver.AlgoHelpers do
     |> rotate_cubicle(get_rotate_map(corner))
   end
 
-  def rotate_f2l_cubie(to_rotate, rotation, rotate_map) do
+  def rotate_cubie(to_rotate, rotation, rotate_map) do
     String.to_charlist(to_rotate)
       |> Enum.map(
         fn char -> 
@@ -98,7 +104,7 @@ defmodule Rubik.Solver.AlgoHelpers do
         Map.put(
           result_map, 
           new_cubicle, 
-          rotate_f2l_cubie(cubie, rotation, rotate_map)
+          rotate_cubie(cubie, rotation, rotate_map)
         )
       end
     )

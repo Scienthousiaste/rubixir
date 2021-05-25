@@ -1,23 +1,20 @@
 defmodule Rubik.Solver.CFOP do
 
-  alias Rubik.Solver
-  alias Rubik.Cube
-
-  defp compute_cross_progress(cube, base_face) do
-    Enum.filter(Cube.edges(base_face),
-      fn edge -> Solver.is_cubie_in_place?(
-        Map.get(cube, edge),
-        edge
-      ) end
-    )
-  end
+  alias Rubik.Solver.Cross.StartingPoint
+  alias Rubik.Solver.Cross
 
   def init_cfop_solver_data(cube) do
+    base_face = :D 
+    starting_point = StartingPoint.select_starting_point(cube, base_face)
+    progress = Cross.compute_cross_progress(
+      cube, base_face, starting_point)
+
     %Rubik.SolverData{
-      cube:       cube,
-      base_face:  :D,
-      moves:      [],
-      progress:   compute_cross_progress(cube, :D)
+      cube:           cube,
+      base_face:      base_face,
+      moves:          [],
+      progress:       progress,
+      starting_point: starting_point
     }
   end
   
@@ -75,7 +72,7 @@ defmodule Rubik.Solver.CFOP do
   end
 
   defp describe_state(solver_data = %{moves: moves}, name_step) do
-    IO.puts "After step #{name_step}, #{Enum.count moves} moves"
+    #IO.puts "After step #{name_step}, #{Enum.count moves} moves"
     solver_data
   end
 

@@ -33,16 +33,25 @@ defmodule Rubik.BFS do
     get_move_sequences_to_explore(depth - 1) ++ get_move_sequences(depth)
   end
 
-  def reach_goal(solver_data, goal, max_depth) do
-    goal_state = solver_data.progress ++ [goal]
-
-    Enum.find(get_move_sequences_to_explore(max_depth), [],
-      fn move_sequence ->
-        Rubik.Solver.Helpers.goal_reached?(
-          Rubik.Transforms.qturns(solver_data.cube, move_sequence),
-          goal_state
-        )
+  defp goal_reached_with_moves?(move_sequence, cube, goal_state) do
+    Enum.all?(
+      goal_state,
+      fn {cubicle, cubie} ->
+        Rubik.Transforms.qturns(cube, move_sequence)
+        |> Map.get(cubicle) == cubie
       end
     )
   end
+
+  def reach_goal_cross(solver_data = %{cube: cube}, current_goal, max_depth) do
+    goal_state = solver_data.progress ++ [current_goal]
+    Enum.find(
+      get_move_sequences_to_explore(max_depth),
+      [],
+      fn move_sequence ->
+        goal_reached_with_moves?(move_sequence, cube, goal_state) 
+      end
+    )
+  end
+
 end

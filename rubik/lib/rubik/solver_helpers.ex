@@ -76,6 +76,7 @@ defmodule Rubik.Solver.Helpers do
     solver_data 
   end
   def update_solver_data(move_sequence, solver_data, [goal1, goal2]) do
+    #F2L
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
         progress: solver_data.progress ++ [goal1, goal2], 
@@ -83,15 +84,12 @@ defmodule Rubik.Solver.Helpers do
     }
   end
   def update_solver_data(move_sequence, solver_data, goal) do
+    #Cross goal
     %{ solver_data |
         cube: Rubik.Transforms.qturns(solver_data.cube, move_sequence),
-        progress: solver_data.progress ++ to_atom_list(goal), 
+        progress: solver_data.progress ++ [goal], 
         moves: solver_data.moves ++ move_sequence
     }
-  end
-
-  defp to_atom_list(elem) do
-    [String.to_atom(String.upcase(elem))]
   end
 
 end
