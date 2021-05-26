@@ -1,7 +1,7 @@
 defmodule RubikGlobalTest do
   use ExUnit.Case
 
-  @number_iterations 1
+  @number_iterations 5
   
   defp describe_result(_solved = false, cube, moves, start_time) do
     IO.puts "Failed to solve cube"

@@ -71,21 +71,12 @@ defmodule Rubik.Solver.CFOP do
     )
   end
 
-  defp describe_state(solver_data = %{moves: moves}, name_step) do
-    #IO.puts "After step #{name_step}, #{Enum.count moves} moves"
-    solver_data
-  end
-
   def solve(cube) do
     init_cfop_solver_data(cube)
     |> Rubik.Solver.Cross.solve_cross
-    |> describe_state("Cross")
     |> Rubik.Solver.F2L.solve_f2l
-    |> describe_state("F2L")
     |> Rubik.Solver.OLL.solve_oll
-    |> describe_state("OLL")
     |> Rubik.Solver.PLL.solve_pll
-    |> describe_state("PLL")
     |> cull_redundant_moves
   end
 

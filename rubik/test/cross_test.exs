@@ -9,8 +9,7 @@ defmodule RubikCrossTest do
       DF: "dr",
       DR: "db"
     })
-
-    assert StartingPoint.select_starting_point(cube, :D) == :DF
+    assert StartingPoint.select_starting_point(cube, :D) == :DB
   end
 
   test "Selecting a starting point not requiring a rotation in a 2 vs 2 case" do
@@ -20,7 +19,29 @@ defmodule RubikCrossTest do
       DR: "dr",
       DB: "df"
     })
-
     assert StartingPoint.select_starting_point(cube, :D) == :DL
   end 
+
+  test "Correctly choosing DR" do
+    cube = Rubik.cube_test(%{
+      DB: "df", 
+    })
+    assert StartingPoint.select_starting_point(cube, :D) == :DR
+  end 
+
+  test "Correctly choosing DF" do
+    cube = Rubik.cube_test(%{
+      DR: "df"
+    })
+    assert StartingPoint.select_starting_point(cube, :D) == :DF
+  end 
+
+  test "Choosing DL when 1 vs 1" do
+    cube = Rubik.cube_test(%{
+      DR: "df",
+      DB: "db"
+    })
+    assert StartingPoint.select_starting_point(cube, :D) == :DL
+  end 
+
 end

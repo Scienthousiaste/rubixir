@@ -31,6 +31,8 @@ defmodule Rubik.Solver.AlgoHelpers do
   def get_rotate_map(:qrturn),  do: @rotate_map.qrturn
   def get_rotate_map(:hturn),   do: @rotate_map.hturn
   def get_rotate_map(:id),      do: @rotate_map.id
+  def get_rotate_map(nil),      do: @rotate_map.id
+
 
   def rotate_char(nil, char),   do: char
   def rotate_char(new_char, _), do: new_char 

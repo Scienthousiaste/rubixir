@@ -4,20 +4,22 @@ defmodule Rubik.Solver.Cross do
   @max_iter_solve_cross 5
   @max_moves_per_bfs_search 4
   
-  defp find_next_cross_goal(solver_data = %{ cube: cube, base_face: face,
-    starting_point: starting_point }) do
-   
+  defp find_next_cross_goal(solver_data = %{ cube: cube,
+    base_face: face, starting_point: starting_point }) do
     goal = Enum.find(
-      Enum.zip(Rubik.Cube.edges(face), cross_goal_state(starting_point, face)),
+      Enum.zip(
+        Rubik.Cube.edges(face),
+        cross_goal_state(starting_point, face)),
       fn { cubicle, cubie } ->
         cubie != Map.get(cube, cubicle)
       end
     )
-    IO.inspect ["In find_next_cross_goal, goal = ", goal]
     { solver_data, goal }
   end
   
-  defp orient_cross_move(starting_point) do
+  defp reorient_cross_move(starting_point) do
+    # When cross is done with "dl" in the starting_point cubicle, 
+    # what move is required to reorient the cross?
     Map.get(%{
       DL: [],
       DF: ["D'"],
@@ -28,7 +30,7 @@ defmodule Rubik.Solver.Cross do
   
   defp complete_cross_goal( { solver_data = %{starting_point: starting_point}, nil } ) do
     Helpers.update_solver_data(
-      orient_cross_move(starting_point),
+      reorient_cross_move(starting_point),
       solver_data
     )
   end
