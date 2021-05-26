@@ -1,24 +1,32 @@
 defmodule Rubik.BFS do
 
+  defp moves_minus_previous(previous) do
+    Enum.filter(
+      Rubik.Cube.moves(),
+      fn m -> String.at(m, 0) != String.at(previous, 0) end
+    )
+  end
+
   def get_move_sequences(4) do
     for a <- Rubik.Cube.moves(),
-        b <- Rubik.Cube.moves(),
-        c <- Rubik.Cube.moves(),
-        d <- Rubik.Cube.moves() do
+        b <- moves_minus_previous(a),
+        c <- moves_minus_previous(b),
+        d <- moves_minus_previous(c) do
       [a, b, c, d]
     end
   end
 
   def get_move_sequences(3) do
     for a <- Rubik.Cube.moves(),
-        b <- Rubik.Cube.moves(),
-        c <- Rubik.Cube.moves() do
+        b <- moves_minus_previous(a),
+        c <- moves_minus_previous(b) do
       [a, b, c]
     end
   end
   
   def get_move_sequences(2) do
-    for a <- Rubik.Cube.moves(), b <- Rubik.Cube.moves() do
+    for a <- Rubik.Cube.moves(), 
+        b <- moves_minus_previous(a) do
       [a, b]
     end
   end
