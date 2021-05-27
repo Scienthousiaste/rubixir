@@ -4,6 +4,7 @@ import "phoenix_html"
 import Rubik3D from "./Rubik3D.js"
 import { bindButtonToActions, initRangeInput } from "./UI.js"
 import RubikSocket from "./rubik_socket.js"
+import { CUBE_IN_CUBE_IN_CUBE_PATTERN } from "./constants_3D.js"
 
 let rubik3D = {}
 const animate = (timeSinceBeginning) => {
@@ -14,10 +15,16 @@ const animate = (timeSinceBeginning) => {
 const isOnRubikPage = () => {
 	return (window.location.pathname === "/rubik")
 }
+const isOnLandingPage = () => {
+	return (window.location.pathname === "/")
+}
 
 window.onload = function() {
 	if (isOnRubikPage()) {
 		manageRubikPage()
+	}
+	if (isOnLandingPage()) {
+		manageLandingPage()
 	}
 }
 
@@ -30,3 +37,10 @@ const manageRubikPage = () => {
 	animate()
 }
 
+const manageLandingPage = () => {
+	rubik3D = new Rubik3D("noInteraction")
+	animate()
+	setTimeout(function(){ 
+		rubik3D.animateMoveSequence(CUBE_IN_CUBE_IN_CUBE_PATTERN)
+	}, 1000);
+}

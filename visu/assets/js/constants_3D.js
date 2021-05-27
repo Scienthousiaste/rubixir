@@ -66,5 +66,8 @@ export const TRANSFORMATIONS = {
 	}
 }
 
+export const DEFAULT_MOVE_ANIMATION_DURATION = 2000
 
-export const DEFAULT_MOVE_ANIMATION_DURATION = 500
+export const DEFAULT_CUBE = {"DB":"db","DF":"df","DL":"dl","DLB":"dlb","DLF":"dlf","DR":"dr","DRB":"drb","DRF":"drf","LB":"lb","LF":"lf","RB":"rb","RF":"rf","UB":"ub","UF":"uf","UL":"ul","ULB":"ulb","ULF":"ulf","UR":"ur","URB":"urb","URF":"urf"}
+
+export const CUBE_IN_CUBE_IN_CUBE_PATTERN = ["U'", "L'", "U'", "F'", "R2", "B'", "R", "F", "U", "B2", "U", "B'", "L", "U'", "F", "U", "R", "F'"]

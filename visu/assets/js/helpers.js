@@ -1,6 +1,7 @@
 import {
 	QUARTER_TURN,
-	FACES
+	FACES,
+	DEFAULT_CUBE
 } from "./constants_3D.js"
 
 export const angleFromMove = (move) => {
@@ -11,8 +12,9 @@ export const angleFromMove = (move) => {
 }
 
 export const getCube = () => {
-	const cube_dom = document.querySelector('#cube3D')
-	return (JSON.parse(cube_dom.dataset.cube))
+	//const cube_dom = document.querySelector('#cube3D')
+	//return (JSON.parse(cube_dom.dataset.cube))
+	return DEFAULT_CUBE
 }
 
 const makeTransformation = (cubies, transformation) => {

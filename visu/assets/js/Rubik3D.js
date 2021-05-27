@@ -27,22 +27,28 @@ import {
 	FACE_TO_AXIS,
 	TRANSFORMATIONS,
 	DEFAULT_MOVE_ANIMATION_DURATION,
+	CUBE_IN_CUBE_IN_CUBE_PATTERN
 } from "./constants_3D.js"
 
 
 export default class Rubik3D {
 
-	constructor() {
+	constructor(noInteraction) {
+		this.noInteraction = noInteraction === "noInteraction" ? true : false
 		this.scene = initScene()
 		this.renderer = initRenderer()
 		this.container = initContainer(this)
 		this.camera = initCamera(this)	
-		this.cubies = initCube(this, getCube())
 		this.controls = initControls(this)
 		this.moveAnimationDuration = DEFAULT_MOVE_ANIMATION_DURATION
-
 		this.setRemainingAnimations([])
 		this.initAnimationData()
+		this.cubies = initCube(this, getCube())
+
+		if (this.noInteraction) {
+			this.controls.autoRotate = true
+			this.controls.enabled = false
+		}
 	}
 
 	initAnimationData() {
@@ -59,7 +65,10 @@ export default class Rubik3D {
 
 	setRemainingAnimations(newValue) {
 		this.remainingAnimations = [...newValue]
-		displayRemainingAnimations(this.remainingAnimations)
+
+		if (!this.noInteraction) {
+			displayRemainingAnimations(this.remainingAnimations)
+		}
 	}
 
 	setMoveAnimationDuration(newValue) {
@@ -76,6 +85,9 @@ export default class Rubik3D {
 			else {
 				this.computeNextAnimationStep(timeSinceBeginning - this.lastFrameTime)
 			}
+		}
+		if (this.noInteraction) {
+			this.controls.update()
 		}
 		this.renderer.render(this.scene, this.camera)
 		this.lastFrameTime = timeSinceBeginning
@@ -127,6 +139,10 @@ export default class Rubik3D {
 		this.animationCurrentAngle = 0
 		this.startAnimationTime = Date.now()
 		this.animationRunning = true
+		
+		if (this.noInteraction && this.remainingAnimations.length < 3) {
+			this.animateMoveSequence(CUBE_IN_CUBE_IN_CUBE_PATTERN)
+		}
 	}
 
 	animateMove(move) {
