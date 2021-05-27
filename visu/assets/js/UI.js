@@ -1,3 +1,21 @@
+import { createSequenceButtons } from "./sequences.js"
+
+
+function handleSequenceInput(rubikSocket, rubik3D) {
+	const moveSequenceTextarea = document.querySelector("#move_sequence_input")
+	const sequence = moveSequenceTextarea.value
+	
+	if (rubik3D.isValidSequence(sequence)) {
+		const sequenceButtonsContainer = 
+			document.querySelector("#sequence_buttons_container")
+		sequenceButtonsContainer.appendChild(
+			createSequenceButtons(sequence, rubikSocket, rubik3D)
+		)
+	}
+	else {
+		alert("wrong sequence")
+	}
+}
 
 export function bindButtonToActions(rubikSocket, rubik3D) {
 
@@ -19,19 +37,21 @@ export function bindButtonToActions(rubikSocket, rubik3D) {
 		rubikSocket.fetchScrambledCube()
 	}
 
+	const solveCubeButton = document.querySelector("#solve_cube")
 	const solveCrossButton = document.querySelector("#solve_cross")
+	const solveF2LButton = document.querySelector("#solve_f2l")
+	const solveOLLButton = document.querySelector("#solve_oll")
+	solveCubeButton.onclick = () => {
+		rubikSocket.solveCube()
+	}
 	solveCrossButton.onclick = () => {
 		rubikSocket.solveCross()
 	}
-
-	const cubeInCubePatternButton = document.querySelector("#cube_in_cube_pattern")
-	cubeInCubePatternButton.onclick = () => {
-		rubikSocket.cubeInCubeInCubePattern()
+	solveF2LButton.onclick = () => {
+		rubikSocket.solveF2L()
 	}
-	
-	const superflipPatternButton = document.querySelector("#superflip_pattern")
-	superflipPatternButton.onclick = () => {
-		rubikSocket.superflipPattern()
+	solveOLLButton.onclick = () => {
+		rubikSocket.solveOLL()
 	}
 
 	const moveAnimationDurationSlider = document.querySelector("#moveAnimationDuration")
@@ -42,10 +62,29 @@ export function bindButtonToActions(rubikSocket, rubik3D) {
 		rubik3D.setMoveAnimationDuration(newValue)
 	}
 
+	const patternButtons = document.querySelectorAll("#patterns-buttons div")
+	for (const patternButton of patternButtons) {
+		patternButton.onclick = () => {
+			rubikSocket.pushPattern(patternButton.id)
+		}
+	}
+
 	const saveInputButton = document.querySelector("#save_input_sequence")
 	saveInputButton.onclick = () => {
 		handleSequenceInput(rubikSocket, rubik3D)
 	}
+}
+
+export function initRangeInput(rubik3D) {
+	const rangeElement = document.querySelector("#moveAnimationDuration")
+	const moveAnimationValueElement = document.querySelector("#moveAnimationValue")
+	moveAnimationValue = rangeElement.value
+	moveAnimationValueElement.textContent = moveAnimationValue + "ms"
+	rubik3D.setMoveAnimationDuration(moveAnimationValue)
+}
+
+function formatRemainingAnimations(remainingAnimations) {
+	return (remainingAnimations.join(" "))
 }
 
 export function displayRemainingAnimations(remainingAnimations) {
@@ -54,78 +93,8 @@ export function displayRemainingAnimations(remainingAnimations) {
 		element.textContent = ""
 	}
 	else {
-		element.textContent = "Remaining moves: " + JSON.stringify(remainingAnimations)
-	}
-}
-
-
-function inverseSequence(sequenceString) {
-	const sequence = sequenceString.split(" ")	
-	return sequence.reverse().map(move => {
-		if (move.length === 1) {
-			return move + "'"
-		}
-		else if (move[1] === "'") {
-			return move[0]
-		}
-		return move
-	}).join(" ")
-}
-
-function createSequenceButton(sequence, rubikSocket, rubik3D, textButton) {
-	const newElement = document.createElement("div")
-	newElement.textContent = textButton ? textButton : "do"
-	newElement.setAttribute("class", "sequence-button action-button")
-	newElement.onclick = () => {
-		rubikSocket.makeMoveSequence(sequence)
-	}
-	return newElement
-}
-
-function createSequenceCancelButton(sequence, rubikSocket, rubik3D) {
-	return createSequenceButton(inverseSequence(sequence), rubikSocket, rubik3D, "undo")
-}
-
-function createSequenceNodeText(sequence) {
-	const ret = document.createElement("div")
-	ret.textContent = sequence
-	return ret
-}
-
-function makeRemoveSequenceActionContainer(sequenceButtonContainer) {
-	const elt = document.createElement("div")
-	elt.textContent = "x"
-	elt.setAttribute("class", "remove-sequence")
-	elt.onclick = () => {
-		sequenceButtonContainer.remove()	
-	}
-	return elt
-}
-
-function createSequenceButtons(sequence, rubikSocket, rubik3D) {
-	const sequenceButtonContainer = document.createElement("div")
-	sequenceButtonContainer.setAttribute("class", "sequence-button-container")
-	sequenceButtonContainer.appendChild(createSequenceNodeText(sequence))
-	sequenceButtonContainer.appendChild(
-		makeRemoveSequenceActionContainer(sequenceButtonContainer)
-	)
-	sequenceButtonContainer.appendChild(createSequenceButton(sequence, rubikSocket, rubik3D))
-	sequenceButtonContainer.appendChild(createSequenceCancelButton(sequence, rubikSocket, rubik3D))
-	
-	return sequenceButtonContainer
-}
-
-function handleSequenceInput(rubikSocket, rubik3D) {
-	const moveSequenceTextarea = document.querySelector("#move_sequence_input")
-	const sequence = moveSequenceTextarea.value
-	
-	if (rubik3D.isValidSequence(sequence)) {
-		const sequenceButtonsContainer = 
-			document.querySelector("#sequence_buttons_container")
-		
-		sequenceButtonsContainer.appendChild(createSequenceButtons(sequence, rubikSocket, rubik3D))
-	}
-	else {
-		alert("wrong sequence")
+		element.textContent = "Remaining moves: " + formatRemainingAnimations(
+			remainingAnimations
+		)
 	}
 }

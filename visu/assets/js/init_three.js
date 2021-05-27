@@ -80,7 +80,9 @@ export const initScene = () => {
 }
 
 export const initContainer = (rubik3D) => {
-	const container = document.getElementById("cube3D")
+	const rubikPageContainer = document.getElementById("cube3D")
+	const landingPageContainer = document.getElementById("cube-previsualization") 
+	const container = rubikPageContainer || landingPageContainer
 	container.appendChild(rubik3D.renderer.domElement)
 	return container
 }

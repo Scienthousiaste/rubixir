@@ -63,7 +63,7 @@ defmodule Rubik.Solver.CFOP do
     solver_data
   end
 
-  defp cull_redundant_moves(solver_data = %{moves: moves}) do
+  def cull_redundant_moves(solver_data = %{moves: moves}) do
     new_moves = iter_over_moves(moves, [])
     rec_cull_redundant_moves(
       Enum.count(new_moves) < Enum.count(moves),

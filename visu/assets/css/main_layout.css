@@ -1,0 +1,49 @@
+body {
+	margin: 0 auto;
+	max-width: 50em;
+	font-family: "Crimson Text", sans-serif;
+	line-height: 1.5;
+	padding: 2em 1em;
+	color: #444;
+}
+
+h1 {
+	text-align: center;
+	font-size: 40px;
+	font-family: "Roboto", "Helvetica", "sans-serif";
+}
+
+.author {
+	margin-top: 2em;
+	text-align: center;
+}
+
+a {
+	font-weight: bold;
+	color: #ef7755;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #ff9977;
+}
+
+.global-layout {
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	width: 450px;
+	display: flex;
+	flex-direction: column;
+	padding: 0 5px;
+}
+
+.title-section {
+	text-align: center;
+}
+
+.column section {
+	padding: 0.5em 0 0.5em 0;
+}

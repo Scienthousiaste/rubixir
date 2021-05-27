@@ -16,7 +16,9 @@ defmodule VisuWeb.Router do
   scope "/", VisuWeb do
     pipe_through :browser
 
-    get "/", RubikController, :init_rubik
+    
+    get "/", RubikController, :landing_page
+    get "/rubik", RubikController, :init_rubik
   end
 
 end

@@ -191,9 +191,23 @@ export default class Rubik3D {
 		elt.appendChild(newCrossSolution)
 	}
 
+	displayMoveSequence(
+		{
+			moves: moveSequence,
+			type: type
+		}) {
+
+		if (type) {
+			//if type === "solve", displaySolutionBlock
+			//if pattern, display moves of the pattern too
+			console.log("receive type "+ type)
+		}
+		this.animateMoveSequence(moveSequence)
+
+	}
+
 	isValidSequence(sequence) {
-		//TODO
-		//with regexp
+		//TODO with regexp
 		return true
 	}
 }

@@ -1,0 +1,78 @@
+.move-buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.move-button {
+	width: 13%;
+}
+
+.action-button {
+    background-color: #0069d9;
+    border-radius: .4rem;
+    color: #fff;
+    cursor: pointer;
+	line-height: 2em;
+	text-align: center;
+	margin: 3px;
+	font-family: "Roboto", sans-serif;
+}
+
+.action-button:hover {
+    background-color: #0092ff;
+}
+
+.sequence-button-container {
+	border: black 1px dotted;
+}
+
+.remove-sequence {
+	width: 15px;
+	height: 15px;
+	text-align: center;
+	background-color: red;
+	cursor: pointer;
+}
+
+.cross_solution {
+	display: flex;
+	flex-direction: row;
+	width: 230px;
+}
+
+label[for=moveAnimationDuration] {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#cube-previsualization {
+	width: 450px;
+	height: 450px;	
+	margin: auto;
+}
+
+#new-cube-buttons {
+	display: flex;
+	flex-direction: row;
+}
+#new-cube-buttons .action-button {
+	width: 50%;
+}
+
+.column section.large-buttons .action-button {
+	margin: 3px 60px 3px 60px;	
+	min-width: 200px;
+}
+
+#patterns-buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+#patterns-buttons .action-button {
+	width: 47%;
+}

@@ -1,0 +1,23 @@
+<h1>Rubixir</h1>
+
+<div>
+  Rubixir is a Rubik's Cube sandbox, made for the <a href="https://www.42.fr/" target="_blank">42 programming school</a> project Rubik. The languages used are:<br>
+
+  <ul>
+  <li>plain Elixir for the main logic, in a standalone module that provides an API to manipulate and solve a Rubik's Cube</li> 
+  <li>the Elixir <a href="https://www.phoenixframework.org/" target="_blank">Phoenix web framework</a> for this webpage</li> 
+  <li>JavaScript and <a href="https://threejs.org/" target="_blank">three.js</a> for the 3D visualization</li> 
+  </ul>
+
+  <a href="./rubik" alt="Clic to see Rubixir in action">
+    <div id="cube-previsualization">
+    </div>
+  </a>
+
+  <div class="author">
+    <div>Author: Timothée Behra</div>
+    <div><a href="https://github.com/Scienthousiaste/rubixir" target="_blank">Github repo</a></div>
+  </div>
+</div>
+
+

@@ -1,55 +1,7 @@
 
-.global-layout {
-	display: flex;
-	flex-direction: row;
-}
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Roboto:wght@300;900&display=swap');
 
-.move-buttons {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	width: 250px;
-}
-
-.action-button {
-    background-color: #0069d9;
-    border-radius: .4rem;
-    color: #fff;
-    cursor: pointer;
-	line-height: 2em;
-	text-align: center;
-	margin: 3px;
-	font-family: Roboto, sans-serif;
-	max-width: 150px;
-}
-
-.move-button {
-	width: 30%;
-}
-
-.action-button:hover {
-    background-color: #0092ff;
-}
+@import "./main_layout.css";
+@import "./UI.css"
 
 
-
-
-.sequence-button-container {
-	border: black 1px dotted;
-}
-
-.remove-sequence {
-	width: 15px;
-	height: 15px;
-	text-align: center;
-	background-color: red;
-	cursor: pointer;
-}
-
-.cross_solution {
-	display: flex;
-	flex-direction: row;
-	width: 230px;
-	justify-content: space-between;
-	border: black 1px solid; 
-}

@@ -11,5 +11,8 @@ defmodule Rubik do
   defdelegate qturns(cube, move_list),      to: Rubik.Transforms
 
   defdelegate solve_cube(cube),             to: Rubik.Solver
+  defdelegate solve_cross(cube),            to: Rubik.Solver
+  defdelegate solve_f2l(cube),              to: Rubik.Solver
+  defdelegate solve_oll(cube),              to: Rubik.Solver
 
 end
