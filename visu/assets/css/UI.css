@@ -24,24 +24,6 @@
     background-color: #0092ff;
 }
 
-.sequence-button-container {
-	border: black 1px dotted;
-}
-
-.remove-sequence {
-	width: 15px;
-	height: 15px;
-	text-align: center;
-	background-color: red;
-	cursor: pointer;
-}
-
-.cross_solution {
-	display: flex;
-	flex-direction: row;
-	width: 230px;
-}
-
 label[for=moveAnimationDuration] {
 	display: flex;
 	flex-direction: column;
@@ -75,4 +57,20 @@ label[for=moveAnimationDuration] {
 
 #patterns-buttons .action-button {
 	width: 47%;
+}
+
+textarea {
+	width: 98%;
+	margin: 5px 0 5px 0;
+	resize: none;
+	font-family: "Roboto", sans-serif;
+}
+
+#play_reverse_sequence {
+	display: flex;
+	flex-direction: row;
+}
+
+#play_reverse_sequence .action-button {
+	width: 48%;
 }

@@ -3,7 +3,6 @@ body {
 	max-width: 50em;
 	font-family: "Crimson Text", sans-serif;
 	line-height: 1.5;
-	padding: 2em 1em;
 	color: #444;
 }
 
@@ -46,4 +45,9 @@ a:hover {
 
 .column section {
 	padding: 0.5em 0 0.5em 0;
+}
+
+.error-message {
+	display: none;
+	color: red;
 }

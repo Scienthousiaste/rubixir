@@ -19,7 +19,8 @@ import {
 } from "./helpers.js"
 
 import {
-	displayRemainingAnimations
+	displayRemainingAnimations,
+	displaySolutionBlock
 } from "./UI.js"
 
 import {
@@ -175,39 +176,15 @@ export default class Rubik3D {
 		this.cubies = initCube(this, cube)
 	}
 
-	addToCrossSolutions(move_sequence) {
-		//TODO: remove
-		const elt = document.querySelector("#cross_solves")
-		const newCrossSolution = document.createElement("div")
-		const csText = document.createElement("div")
-		const csNum = document.createElement("div")
-
-		newCrossSolution.setAttribute("class", "cross_solution")
-		csText.textContent = move_sequence.join(" ")
-		console.dir(move_sequence)
-		csNum.textContent = move_sequence.length
-		newCrossSolution.appendChild(csText)
-		newCrossSolution.appendChild(csNum)
-		elt.appendChild(newCrossSolution)
-	}
-
 	displayMoveSequence(
 		{
 			moves: moveSequence,
 			type: type
 		}) {
 
-		if (type) {
-			//if type === "solve", displaySolutionBlock
-			//if pattern, display moves of the pattern too
-			console.log("receive type "+ type)
+		if (type === "solve") {
+			displaySolutionBlock(moveSequence)
 		}
 		this.animateMoveSequence(moveSequence)
-
-	}
-
-	isValidSequence(sequence) {
-		//TODO with regexp
-		return true
 	}
 }

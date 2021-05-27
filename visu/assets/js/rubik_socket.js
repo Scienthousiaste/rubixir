@@ -20,7 +20,6 @@ export default class RubikSocket {
 		})
 		this.channel.on("move_sequence", msg => {
 			console.log("Move sequence received: " + msg.moves)
-			console.dir(msg)
 			this.rubik3D.displayMoveSequence(msg)
 		})
 	}
@@ -50,6 +49,10 @@ export default class RubikSocket {
 	}
 
 	makeMoveSequence(moves) {
+		this.channel.push("move_sequence", {move_sequence: moves})
+	}
+
+	tryMoveSequence(moves) {
 		this.channel.push("move_sequence", {move_sequence: moves})
 	}
 

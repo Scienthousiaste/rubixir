@@ -42,3 +42,23 @@ export const isDoubleMove = (move) => {
 export const isReverseMove = (move) => {
 	return (FACES.includes(move.charAt(0)) && move.charAt(1) === "'")
 }
+
+export const isValidSequence = (sequence) => {
+	return (regexMoveSequence.test(sequence))
+}
+
+export const inverseSequence = (sequenceString) => {
+	const sequence = sequenceString.split(" ")	
+	return sequence.reverse().map(move => {
+		if (move.length === 1) {
+			return move + "'"
+		}
+		else if (move[1] === "'") {
+			return move[0]
+		}
+		return move
+	}).join(" ")
+}
+
+const regexMoveSequence = /^([FRUBLD][2']?)+$/
+export const regexExtractMovesSequence = /([FRUBLD][2']?)/g

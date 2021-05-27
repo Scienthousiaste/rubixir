@@ -1,34 +1,23 @@
 <h1>Rubixir</h1>
 
 <div class="global-layout">
-
   <div class="column">
     <div id="cube3D" 
       data-cube="<%= json_encode(@cube) %>">
     </div>
-
-
-   <section id="animations-block">
-        <label for="moveAnimationDuration">
-          Move animation duration <br>
-          <input type="range" id="moveAnimationDuration" 
-            min="10" max="2000" value="500" step="5"
-          >
-          <div id="moveAnimationValue">500ms</div>
-        </label>
-        <div id="remaining-animations"></div>
-    </section>
-
-
-    <section>
-      <textarea id="move_sequence_input"></textarea>
-      <%= make_action_button("Save input sequence", :save_input_sequence) %>
-      <div id="sequence_buttons_container"></div>
+    <section id="solution-block"></section>
+    <section id="animations-block">
+      <label for="moveAnimationDuration">
+        Move animation duration 
+        <input type="range" id="moveAnimationDuration" 
+          min="10" max="2000" value="500" step="5"
+        >
+        <div id="moveAnimationValue">500ms</div>
+      </label>
+      <div id="remaining-animations"></div>
     </section>
   </div>
-
   <div class="column">
-
       <section class="action-section">
         <div class="title-section">New cube</div>
         <div id="new-cube-buttons">
@@ -36,16 +25,20 @@
           <%= make_action_button("Scrambled", :get_scrambled_cube) %>
         </div>
       </section>
-
       <section class="action-section">
-        <div class="title-section">Individual moves</div>
+        <div class="title-section">Individual moves or sequence input</div>
         <div class="move-buttons">
           <%= for move <- Rubik.get_moves() do %>
             <%= make_move_button(move) %>
           <% end %>
         </div> 
+        <div class="error-message" id="error-message-sequence">A sequence must contain at least one, and only valid moves separated by spaces or newlines. There is an error in the input sequence</div>
+        <textarea id="move_sequence_input"></textarea>
+        <div id="play_reverse_sequence">
+          <%= make_action_button("Play sequence", :play_input_sequence) %>
+          <%= make_action_button("Reverse sequence", :reverse_input_sequence) %>
+        </div>
       </section>
-
       <section class="action-section large-buttons">
         <div class="title-section">Solve the cube with the Fridrich CFOP method</div>
         <%= make_action_button("Solve Cube with CFOP", :solve_cube) %>
@@ -53,16 +46,15 @@
         <%= make_action_button("Solve First 2 Lines", :solve_f2l) %>
         <%= make_action_button("Orient Last Layer", :solve_oll) %>
       </section>
-
       <section class="action-section">
-        <div class="title-section">Preregistered move sequences to display interesting or pretty patterns</div>
+        <div class="title-section">Preregistered move sequences to display interesting
+        or pretty patterns</div>
         <div id="patterns-buttons">
           <%= for pattern <- Channel.Helpers.get_patterns() do %>
             <%= make_action_button(pattern.formatted, pattern.name) %>
           <% end %>
         </div>
       </section>
-
   </div>
 </div>
 

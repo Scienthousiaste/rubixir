@@ -5,8 +5,8 @@ defmodule Rubik.Cube do
   @default_number_moves 30
   
   def moves do
-    ["R", "R2", "R'", "B", "B2", "B'", "L", "L2", "L'",
-     "F", "F2", "F'", "U", "U2", "U'", "D", "D2", "D'"]
+    ["R", "B", "L", "F", "U", "D", "R2", "B2", "L2", "F2",
+     "U2", "D2", "R'", "B'", "L'", "F'", "U'", "D'"]
   end
 
   def face_moves(face) do
