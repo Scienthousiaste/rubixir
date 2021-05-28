@@ -1,21 +1,9 @@
 # Rubik
 
-**TODO: Add description**
+Rubik is the API part of the Rubixir project, a Rubik's Cube sandbox developped by Timothée Behra for the 42 project Rubik. It is written entirely in elixir. 
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `rubik` to your list of dependencies in `mix.exs`:
+To compile the rubik executable, use the command "mix escript.build " in the rubik project folder.
 
-```elixir
-def deps do
-  [
-    {:rubik, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/rubik](https://hexdocs.pm/rubik).
-
+Tests can be run via mix test

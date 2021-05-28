@@ -1,7 +1,6 @@
 defmodule Rubik.PLL.Algorithms do
   
   alias Rubik.Algorithm
-  alias Rubik.Solver.AlgoHelpers
 
   def make_pll_algo(initial_state, moves) do
     %Algorithm{

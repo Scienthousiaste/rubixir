@@ -1,7 +1,6 @@
 defmodule Rubik.OLL.Algorithms do
   
   alias Rubik.Algorithm
-  alias Rubik.Solver.AlgoHelpers
 
   def make_oll_algo(initial_state, moves) do
     %Algorithm{
@@ -85,7 +84,7 @@ defmodule Rubik.OLL.Algorithms do
     ]
   end
 
-  def get_oll_algo_map(face = :D) do
+  def get_oll_algo_map(_face) do
     Enum.reduce(
       get_oll_algos(),
       %{},

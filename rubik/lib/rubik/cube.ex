@@ -1,7 +1,7 @@
 defmodule Rubik.Cube do
 
   @regex_qturn ~r/(\s*[FRUBLD][2']?\s*)/
-  @regex_qturns ~r/\A(\s*[FRUBLD][2']?\s*)*\z/
+  @regex_qturns ~r/\A\s*([FRUBLD][2']?\s*)*\z/
   @default_number_moves 30
   
   def moves do
@@ -91,7 +91,7 @@ defmodule Rubik.Cube do
 
   defp build_cube(_sequence, _valid_sequence = false) do
     IO.puts "The provided sequence of moves is invalid"
-    nil
+    exit(:normal)
   end
 
   defp build_cube(sequence, _valid_sequence = true) do

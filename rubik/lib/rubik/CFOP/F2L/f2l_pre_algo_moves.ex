@@ -1,5 +1,4 @@
 defmodule Rubik.PreAlgo do
-  alias Rubik.Cube
   alias Rubik.Solver.Helpers
 
   defp get_cancel_move(move, 2), do: String.at(move, 0)
