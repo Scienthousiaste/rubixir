@@ -104,6 +104,7 @@ export const initControls = (rubik3D) => {
 		rubik3D.camera,
 		rubik3D.renderer.domElement
 	)
+	controls.enablePan = false
 	controls.enableZoom = false
 	controls.update()
 	return controls

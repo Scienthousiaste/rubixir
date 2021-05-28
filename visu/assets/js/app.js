@@ -39,8 +39,8 @@ const manageRubikPage = () => {
 
 const manageLandingPage = () => {
 	rubik3D = new Rubik3D("noInteraction")
-	animate()
-	setTimeout(function(){ 
-		rubik3D.animateMoveSequence(CUBE_IN_CUBE_IN_CUBE_PATTERN)
+	setTimeout(function() { 
+		rubik3D.launchAnimation()
 	}, 1000);
+	animate()
 }

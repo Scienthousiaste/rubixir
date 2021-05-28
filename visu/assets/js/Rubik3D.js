@@ -44,6 +44,7 @@ export default class Rubik3D {
 		this.setRemainingAnimations([])
 		this.initAnimationData()
 		this.cubies = initCube(this, getCube())
+		this.launched = false
 
 		if (this.noInteraction) {
 			this.controls.autoRotate = true
@@ -75,7 +76,20 @@ export default class Rubik3D {
 		this.moveAnimationDuration = newValue > 10 ? newValue : 10
 	}
 
+	launchAnimation() {
+		this.launched = true
+		this.firstAnim = true
+	}
+
 	renderScene(timeSinceBeginning) {
+		if (this.noInteraction && this.launched && this.firstAnim) {
+			this.firstAnim = false
+			this.animateMoveSequence(
+				CUBE_IN_CUBE_IN_CUBE_PATTERN.concat(
+				CUBE_IN_CUBE_IN_CUBE_PATTERN).concat(
+				CUBE_IN_CUBE_IN_CUBE_PATTERN)
+			)
+		}
 		if (this.animationRunning) {
 			const timeDelta = Date.now() - this.startAnimationTime
 			
@@ -139,10 +153,6 @@ export default class Rubik3D {
 		this.animationCurrentAngle = 0
 		this.startAnimationTime = Date.now()
 		this.animationRunning = true
-		
-		if (this.noInteraction && this.remainingAnimations.length < 3) {
-			this.animateMoveSequence(CUBE_IN_CUBE_IN_CUBE_PATTERN)
-		}
 	}
 
 	animateMove(move) {
@@ -157,8 +167,8 @@ export default class Rubik3D {
 	}
 
 	animateMoveSequence(moves) {
-		for (const move of moves) {
-			this.animateMove(move)
+		for (let i = 0; i < moves.length; i++) {
+			this.animateMove(moves[i])
 		}
 	}
 
