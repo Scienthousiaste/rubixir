@@ -10,8 +10,8 @@ Welcome to Rubixir, a Rubik's Cube sandbox built in Elixir, accompanied by a 3D 
 To build Rubixir, one needs:
 	- to install Elixir (sufficient to build the rubik executable)
 	- to install Phoenix
-	- to have node/npm installed, and to install the dependencies of the server by running the command "npm install" in rubixi/visu/assets
-	- to get the dependency in visu by running mix deps.get
+	- to have node/npm installed
+	- to install the dependencies of the server by running the command mix deps.get (in the visu folder)
 
 ### Troubleshooting mix deps.get
 
@@ -26,6 +26,4 @@ The rubik executable is then created by running "mix escript.build" in the rubik
 ## Running the Phoenix server
 
 The phoenix development server, is launched by running "mix phx.server" in the visu folder, and can be seen in action by opening localhost:4000 in a browser.
-
-
 
