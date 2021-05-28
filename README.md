@@ -11,8 +11,21 @@ To build Rubixir, one needs:
 	- to install Elixir (sufficient to build the rubik executable)
 	- to install Phoenix
 	- to have node/npm installed, and to install the dependencies of the server by running the command "npm install" in rubixi/visu/assets
+	- to get the dependency in visu by running mix deps.get
+
+### Troubleshooting mix deps.get
+
+In case mix deps.get in visu doesn't respond properly, run the next two commands in visu:
+	- mix deps.unlock --all
+	- mix deps.update --all
 
 If you're on MacOS, running the macos_setup_elixir.sh should install elixir and phoenix, otherwise please refer to https://elixir-lang.org/install.html and https://hexdocs.pm/phoenix/installation.html#content.
 
 The rubik executable is then created by running "mix escript.build" in the rubik folder.
-The visu development server is launched by running "mix phx.server" in the visu folder, and can be seen in action by opening localhost:4000 in a browser.
+
+## Running the Phoenix server
+
+The phoenix development server, is launched by running "mix phx.server" in the visu folder, and can be seen in action by opening localhost:4000 in a browser.
+
+
+
