@@ -3,3 +3,4 @@ rubik/rubik
 visu/deps
 visu/_build
 visu/assets/node_modules
+visu/priv/static
