@@ -11,7 +11,7 @@ To build Rubixir, one needs:
 	- to install Elixir (sufficient to build the rubik executable)
 	- to install Phoenix
 	- to have node/npm installed
-	- to install the npm dependancies (run "npm install" in the rubixir/visu/assets folder)
+	- to install the npm dependencies (run "npm install" in the rubixir/visu/assets folder)
 	- to install the dependencies of the server by running the command mix deps.get (in the visu folder)
 
 ### Troubleshooting mix deps.get
