@@ -1,4 +1,5 @@
 rubik/_build
 rubik/rubik
-visu/_build
 visu/deps
+visu/_build
+visu/assets/node_modules
