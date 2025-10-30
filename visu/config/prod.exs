@@ -10,8 +10,11 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :visu, VisuWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "timothee.dev", port: 443, scheme: "https", path: "/rubixir"],
+  http: [port: 4000],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  check_origin: ["https://timothee.dev", "https://www.timothee.dev"]
 
 # Do not print debug messages in production
 config :logger, level: :info

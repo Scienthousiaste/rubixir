@@ -3,7 +3,7 @@ import {Socket} from "phoenix"
 export default class RubikSocket {
 
 	constructor(rubik3D) {
-		this.socket = new Socket("/socket", {})
+		this.socket = new Socket("/rubixir/socket", {})
 		this.socket.connect()
 		this.rubik3D = rubik3D
 	}

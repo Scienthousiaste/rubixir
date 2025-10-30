@@ -8,7 +8,7 @@
   <li>JavaScript and <a href="https://threejs.org/" target="_blank">three.js</a> for the 3D visualization</li> 
   </ul>
 
-  <a href="./rubik" alt="Clic to see Rubixir in action">
+  <a href="./rubixir/rubik" alt="Clic to see Rubixir in action">
     <div id="cube-previsualization">
     </div>
   </a>

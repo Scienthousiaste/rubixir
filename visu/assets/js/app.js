@@ -13,10 +13,10 @@ const animate = (timeSinceBeginning) => {
 }
 
 const isOnRubikPage = () => {
-	return (window.location.pathname === "/rubik")
+	return (window.location.pathname === "/rubixir/rubik")
 }
 const isOnLandingPage = () => {
-	return (window.location.pathname === "/")
+	return (window.location.pathname === "/rubixir")
 }
 
 window.onload = function() {
